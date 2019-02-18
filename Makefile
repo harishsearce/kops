@@ -22,7 +22,7 @@ LATEST_FILE?=latest-ci.txt
 GOPATH_1ST:=$(shell go env | grep GOPATH | cut -f 2 -d \")
 UNIQUE:=$(shell date +%s)
 GOVERSION=1.10.3
-BUILD=$(GOPATH_1ST)/src/k8s.io/kops/.build
+BUILD=$(GOPATH_1ST)/src/github.com/harishsearce/kops/.build
 LOCAL=$(BUILD)/local
 BINDATA_TARGETS=upup/models/bindata.go
 ARTIFACTS=$(BUILD)/artifacts
@@ -33,15 +33,15 @@ CHANNELS=$(LOCAL)/channels
 NODEUP=$(LOCAL)/nodeup
 PROTOKUBE=$(LOCAL)/protokube
 UPLOAD=$(BUILD)/upload
-BAZELBUILD=$(GOPATH_1ST)/src/k8s.io/kops/.bazelbuild
+BAZELBUILD=$(GOPATH_1ST)/src/github.com/harishsearce/kops/.bazelbuild
 BAZELDIST=$(BAZELBUILD)/dist
 BAZELIMAGES=$(BAZELDIST)/images
 BAZELUPLOAD=$(BAZELBUILD)/upload
 UID:=$(shell id -u)
 GID:=$(shell id -g)
-TESTABLE_PACKAGES:=$(shell egrep -v "k8s.io/kops/vendor" hack/.packages)
+TESTABLE_PACKAGES:=$(shell egrep -v "github.com/harishsearce/kops/vendor" hack/.packages)
 # We need to ignore clientsets because of kubernetes/kubernetes#60584
-GOVETABLE_PACKAGES:=$(shell egrep -v "k8s.io/kops/vendor|clientset/fake" hack/.packages)
+GOVETABLE_PACKAGES:=$(shell egrep -v "github.com/harishsearce/kops/vendor|clientset/fake" hack/.packages)
 BAZEL_OPTIONS?=
 API_OPTIONS?=
 GCFLAGS?=
@@ -71,7 +71,7 @@ KOPS                 = ${LOCAL}/kops
 # kops source root directory (without trailing /)
 KOPS_ROOT           ?= $(patsubst %/,%,$(abspath $(dir $(firstword $(MAKEFILE_LIST)))))
 
-GITSHA := $(shell cd ${GOPATH_1ST}/src/k8s.io/kops; git describe --always)
+GITSHA := $(shell cd ${GOPATH_1ST}/src/github.com/harishsearce/kops; git describe --always)
 
 # Keep in sync with logic in get_workspace_status
 ifndef VERSION
@@ -133,7 +133,7 @@ endif
 
 .PHONY: kops-install # Install kops to local $GOPATH/bin
 kops-install: gobindata-tool ${BINDATA_TARGETS}
-	go install ${GCFLAGS} ${EXTRA_BUILDFLAGS} ${LDFLAGS}"-X k8s.io/kops.Version=${VERSION} -X k8s.io/kops.GitVersion=${GITSHA} ${EXTRA_LDFLAGS}" k8s.io/kops/cmd/kops/
+	go install ${GCFLAGS} ${EXTRA_BUILDFLAGS} ${LDFLAGS}"-X github.com/harishsearce/kops.Version=${VERSION} -X github.com/harishsearce/kops.GitVersion=${GITSHA} ${EXTRA_LDFLAGS}" github.com/harishsearce/kops/cmd/kops/
 
 .PHONY: channels-install # Install channels to local $GOPATH/bin
 channels-install: ${CHANNELS}
@@ -184,11 +184,11 @@ kops: ${KOPS}
 
 .PHONY: ${KOPS}
 ${KOPS}: ${BINDATA_TARGETS}
-	go build ${GCFLAGS} ${EXTRA_BUILDFLAGS} ${LDFLAGS}"-X k8s.io/kops.Version=${VERSION} -X k8s.io/kops.GitVersion=${GITSHA} ${EXTRA_LDFLAGS}" -o $@ k8s.io/kops/cmd/kops/
+	go build ${GCFLAGS} ${EXTRA_BUILDFLAGS} ${LDFLAGS}"-X github.com/harishsearce/kops.Version=${VERSION} -X github.com/harishsearce/kops.GitVersion=${GITSHA} ${EXTRA_LDFLAGS}" -o $@ github.com/harishsearce/kops/cmd/kops/
 
 ${GOBINDATA}:
 	mkdir -p ${LOCAL}
-	go build ${GCFLAGS} ${EXTRA_BUILDFLAGS} ${LDFLAGS}"${EXTRA_LDFLAGS}" -o $@ k8s.io/kops/vendor/github.com/jteeuwen/go-bindata/go-bindata
+	go build ${GCFLAGS} ${EXTRA_BUILDFLAGS} ${LDFLAGS}"${EXTRA_LDFLAGS}" -o $@ github.com/harishsearce/kops/vendor/github.com/jteeuwen/go-bindata/go-bindata
 
 .PHONY: gobindata-tool
 gobindata-tool: ${GOBINDATA}
@@ -198,7 +198,7 @@ kops-gobindata: gobindata-tool ${BINDATA_TARGETS}
 
 UPUP_MODELS_BINDATA_SOURCES:=$(shell find upup/models/ | egrep -v "upup/models/bindata.go")
 upup/models/bindata.go: ${GOBINDATA} ${UPUP_MODELS_BINDATA_SOURCES}
-	cd ${GOPATH_1ST}/src/k8s.io/kops; ${GOBINDATA} -o $@ -pkg models -ignore="\\.DS_Store" -ignore="bindata\\.go" -ignore="vfs\\.go" -prefix upup/models/ upup/models/...
+	cd ${GOPATH_1ST}/src/github.com/harishsearce/kops; ${GOBINDATA} -o $@ -pkg models -ignore="\\.DS_Store" -ignore="bindata\\.go" -ignore="vfs\\.go" -prefix upup/models/ upup/models/...
 
 # Build in a docker container with golang 1.X
 # Used to test we have not broken 1.X
@@ -206,30 +206,30 @@ upup/models/bindata.go: ${GOBINDATA} ${UPUP_MODELS_BINDATA_SOURCES}
 .PHONY: check-builds-in-go18
 check-builds-in-go18:
 	# Note we only check that kops builds; we know the tests don't compile because of type aliasing in uber zap
-	docker run -v ${GOPATH_1ST}/src/k8s.io/kops:/go/src/k8s.io/kops golang:1.8 make -C /go/src/k8s.io/kops kops
+	docker run -v ${GOPATH_1ST}/src/github.com/harishsearce/kops:/go/src/github.com/harishsearce/kops golang:1.8 make -C /go/src/github.com/harishsearce/kops kops
 
 .PHONY: check-builds-in-go19
 check-builds-in-go19:
-	docker run -v ${GOPATH_1ST}/src/k8s.io/kops:/go/src/k8s.io/kops golang:1.9 make -C /go/src/k8s.io/kops ci
+	docker run -v ${GOPATH_1ST}/src/github.com/harishsearce/kops:/go/src/github.com/harishsearce/kops golang:1.9 make -C /go/src/github.com/harishsearce/kops ci
 
 .PHONY: check-builds-in-go110
 check-builds-in-go110:
-	docker run -v ${GOPATH_1ST}/src/k8s.io/kops:/go/src/k8s.io/kops golang:1.10 make -C /go/src/k8s.io/kops ci
+	docker run -v ${GOPATH_1ST}/src/github.com/harishsearce/kops:/go/src/github.com/harishsearce/kops golang:1.10 make -C /go/src/github.com/harishsearce/kops ci
 
 .PHONY: codegen
 codegen: kops-gobindata
-	go install k8s.io/kops/upup/tools/generators/...
-	PATH="${GOPATH_1ST}/bin:${PATH}" go generate k8s.io/kops/upup/pkg/fi/cloudup/awstasks
-	PATH="${GOPATH_1ST}/bin:${PATH}" go generate k8s.io/kops/upup/pkg/fi/cloudup/gcetasks
-	PATH="${GOPATH_1ST}/bin:${PATH}" go generate k8s.io/kops/upup/pkg/fi/cloudup/dotasks
-	PATH="${GOPATH_1ST}/bin:${PATH}" go generate k8s.io/kops/upup/pkg/fi/cloudup/openstacktasks
-	PATH="${GOPATH_1ST}/bin:${PATH}" go generate k8s.io/kops/upup/pkg/fi/cloudup/alitasks
-	PATH="${GOPATH_1ST}/bin:${PATH}" go generate k8s.io/kops/upup/pkg/fi/assettasks
-	PATH="${GOPATH_1ST}/bin:${PATH}" go generate k8s.io/kops/upup/pkg/fi/fitasks
+	go install github.com/harishsearce/kops/upup/tools/generators/...
+	PATH="${GOPATH_1ST}/bin:${PATH}" go generate github.com/harishsearce/kops/upup/pkg/fi/cloudup/awstasks
+	PATH="${GOPATH_1ST}/bin:${PATH}" go generate github.com/harishsearce/kops/upup/pkg/fi/cloudup/gcetasks
+	PATH="${GOPATH_1ST}/bin:${PATH}" go generate github.com/harishsearce/kops/upup/pkg/fi/cloudup/dotasks
+	PATH="${GOPATH_1ST}/bin:${PATH}" go generate github.com/harishsearce/kops/upup/pkg/fi/cloudup/openstacktasks
+	PATH="${GOPATH_1ST}/bin:${PATH}" go generate github.com/harishsearce/kops/upup/pkg/fi/cloudup/alitasks
+	PATH="${GOPATH_1ST}/bin:${PATH}" go generate github.com/harishsearce/kops/upup/pkg/fi/assettasks
+	PATH="${GOPATH_1ST}/bin:${PATH}" go generate github.com/harishsearce/kops/upup/pkg/fi/fitasks
 
 .PHONY: protobuf
 protobuf:
-	cd ${GOPATH_1ST}/src; protoc --gofast_out=. k8s.io/kops/protokube/pkg/gossip/mesh/mesh.proto
+	cd ${GOPATH_1ST}/src; protoc --gofast_out=. github.com/harishsearce/kops/protokube/pkg/gossip/mesh/mesh.proto
 
 .PHONY: hooks
 hooks: # Install Git hooks
@@ -242,7 +242,7 @@ test: ${BINDATA_TARGETS}  # Run tests locally
 .PHONY: ${DIST}/linux/amd64/nodeup
 ${DIST}/linux/amd64/nodeup: ${BINDATA_TARGETS}
 	mkdir -p ${DIST}
-	GOOS=linux GOARCH=amd64 go build ${GCFLAGS} -a ${EXTRA_BUILDFLAGS} -o $@ ${LDFLAGS}"${EXTRA_LDFLAGS} -X k8s.io/kops.Version=${VERSION} -X k8s.io/kops.GitVersion=${GITSHA}" k8s.io/kops/cmd/nodeup
+	GOOS=linux GOARCH=amd64 go build ${GCFLAGS} -a ${EXTRA_BUILDFLAGS} -o $@ ${LDFLAGS}"${EXTRA_LDFLAGS} -X github.com/harishsearce/kops.Version=${VERSION} -X github.com/harishsearce/kops.GitVersion=${GITSHA}" github.com/harishsearce/kops/cmd/nodeup
 
 .PHONY: crossbuild-nodeup
 crossbuild-nodeup: ${DIST}/linux/amd64/nodeup
@@ -250,23 +250,23 @@ crossbuild-nodeup: ${DIST}/linux/amd64/nodeup
 .PHONY: crossbuild-nodeup-in-docker
 crossbuild-nodeup-in-docker:
 	docker pull golang:${GOVERSION} # Keep golang image up to date
-	docker run --name=nodeup-build-${UNIQUE} -e STATIC_BUILD=yes -e VERSION=${VERSION} -v ${MAKEDIR}:/go/src/k8s.io/kops golang:${GOVERSION} make -C /go/src/k8s.io/kops/ crossbuild-nodeup
+	docker run --name=nodeup-build-${UNIQUE} -e STATIC_BUILD=yes -e VERSION=${VERSION} -v ${MAKEDIR}:/go/src/github.com/harishsearce/kops golang:${GOVERSION} make -C /go/src/github.com/harishsearce/kops/ crossbuild-nodeup
 	docker cp nodeup-build-${UNIQUE}:/go/.build .
 
 .PHONY: ${DIST}/darwin/amd64/kops
 ${DIST}/darwin/amd64/kops: ${BINDATA_TARGETS}
 	mkdir -p ${DIST}
-	GOOS=darwin GOARCH=amd64 go build ${GCFLAGS} -a ${EXTRA_BUILDFLAGS} -o $@ ${LDFLAGS}"${EXTRA_LDFLAGS} -X k8s.io/kops.Version=${VERSION} -X k8s.io/kops.GitVersion=${GITSHA}" k8s.io/kops/cmd/kops
+	GOOS=darwin GOARCH=amd64 go build ${GCFLAGS} -a ${EXTRA_BUILDFLAGS} -o $@ ${LDFLAGS}"${EXTRA_LDFLAGS} -X github.com/harishsearce/kops.Version=${VERSION} -X github.com/harishsearce/kops.GitVersion=${GITSHA}" github.com/harishsearce/kops/cmd/kops
 
 .PHONY: ${DIST}/linux/amd64/kops
 ${DIST}/linux/amd64/kops: ${BINDATA_TARGETS}
 	mkdir -p ${DIST}
-	GOOS=linux GOARCH=amd64 go build ${GCFLAGS} -a ${EXTRA_BUILDFLAGS} -o $@ ${LDFLAGS}"${EXTRA_LDFLAGS} -X k8s.io/kops.Version=${VERSION} -X k8s.io/kops.GitVersion=${GITSHA}" k8s.io/kops/cmd/kops
+	GOOS=linux GOARCH=amd64 go build ${GCFLAGS} -a ${EXTRA_BUILDFLAGS} -o $@ ${LDFLAGS}"${EXTRA_LDFLAGS} -X github.com/harishsearce/kops.Version=${VERSION} -X github.com/harishsearce/kops.GitVersion=${GITSHA}" github.com/harishsearce/kops/cmd/kops
 
 .PHONY: ${DIST}/windows/amd64/kops.exe
 ${DIST}/windows/amd64/kops.exe: ${BINDATA_TARGETS}
 	mkdir -p ${DIST}
-	GOOS=windows GOARCH=amd64 go build ${GCFLAGS} -a ${EXTRA_BUILDFLAGS} -o $@ ${LDFLAGS}"${EXTRA_LDFLAGS} -X k8s.io/kops.Version=${VERSION} -X k8s.io/kops.GitVersion=${GITSHA}" k8s.io/kops/cmd/kops
+	GOOS=windows GOARCH=amd64 go build ${GCFLAGS} -a ${EXTRA_BUILDFLAGS} -o $@ ${LDFLAGS}"${EXTRA_LDFLAGS} -X github.com/harishsearce/kops.Version=${VERSION} -X github.com/harishsearce/kops.GitVersion=${GITSHA}" github.com/harishsearce/kops/cmd/kops
 
 
 .PHONY: crossbuild
@@ -275,10 +275,10 @@ crossbuild: ${DIST}/windows/amd64/kops.exe ${DIST}/darwin/amd64/kops ${DIST}/lin
 .PHONY: crossbuild-in-docker
 crossbuild-in-docker:
 	docker pull golang:${GOVERSION} # Keep golang image up to date
-	docker run --name=kops-build-${UNIQUE} -e STATIC_BUILD=yes -e VERSION=${VERSION} -v ${MAKEDIR}:/go/src/k8s.io/kops golang:${GOVERSION} make -C /go/src/k8s.io/kops/ crossbuild
+	docker run --name=kops-build-${UNIQUE} -e STATIC_BUILD=yes -e VERSION=${VERSION} -v ${MAKEDIR}:/go/src/github.com/harishsearce/kops golang:${GOVERSION} make -C /go/src/github.com/harishsearce/kops/ crossbuild
 	docker start kops-build-${UNIQUE}
-	docker exec kops-build-${UNIQUE} chown -R ${UID}:${GID} /go/src/k8s.io/kops/.build
-	docker cp kops-build-${UNIQUE}:/go/src/k8s.io/kops/.build .
+	docker exec kops-build-${UNIQUE} chown -R ${UID}:${GID} /go/src/github.com/harishsearce/kops/.build
+	docker cp kops-build-${UNIQUE}:/go/src/github.com/harishsearce/kops/.build .
 	docker kill kops-build-${UNIQUE}
 	docker rm kops-build-${UNIQUE}
 
@@ -360,7 +360,7 @@ gen-api-docs:
 	hack/make-gendocs.sh
 	# Update the `pkg/openapi/openapi_generated.go`
 	${GOPATH}/bin/apiserver-boot build generated --generator openapi --copyright hack/boilerplate/boilerplate.go.txt
-	go install k8s.io/kops/cmd/kops-server
+	go install github.com/harishsearce/kops/cmd/kops-server
 	${GOPATH}/bin/apiserver-boot build docs --disable-delegated-auth=false --output-dir docs/apireference --server kops-server
 
 .PHONY: push
@@ -388,7 +388,7 @@ push-aws-run: push
 
 .PHONY: ${PROTOKUBE}
 ${PROTOKUBE}:
-	go build ${GCFLAGS} -o $@ -tags 'peer_name_alternative peer_name_hash' k8s.io/kops/protokube/cmd/protokube
+	go build ${GCFLAGS} -o $@ -tags 'peer_name_alternative peer_name_hash' github.com/harishsearce/kops/protokube/cmd/protokube
 
 .PHONY: protokube
 protokube: ${PROTOKUBE}
@@ -424,21 +424,21 @@ nodeup: ${NODEUP}
 
 .PHONY: ${NODEUP}
 ${NODEUP}: ${BINDATA_TARGETS}
-	go build ${GCFLAGS} ${EXTRA_BUILDFLAGS} ${LDFLAGS}"${EXTRA_LDFLAGS} -X k8s.io/kops.Version=${VERSION} -X k8s.io/kops.GitVersion=${GITSHA}" -o $@ k8s.io/kops/cmd/nodeup
+	go build ${GCFLAGS} ${EXTRA_BUILDFLAGS} ${LDFLAGS}"${EXTRA_LDFLAGS} -X github.com/harishsearce/kops.Version=${VERSION} -X github.com/harishsearce/kops.GitVersion=${GITSHA}" -o $@ github.com/harishsearce/kops/cmd/nodeup
 
 .PHONY: nodeup-dist
 nodeup-dist:
 	mkdir -p ${DIST}
 	docker pull golang:${GOVERSION} # Keep golang image up to date
-	docker run --name=nodeup-build-${UNIQUE} -e STATIC_BUILD=yes -e VERSION=${VERSION} -v ${MAKEDIR}:/go/src/k8s.io/kops golang:${GOVERSION} make -C /go/src/k8s.io/kops/ nodeup
+	docker run --name=nodeup-build-${UNIQUE} -e STATIC_BUILD=yes -e VERSION=${VERSION} -v ${MAKEDIR}:/go/src/github.com/harishsearce/kops golang:${GOVERSION} make -C /go/src/github.com/harishsearce/kops/ nodeup
 	docker start nodeup-build-${UNIQUE}
-	docker exec nodeup-build-${UNIQUE} chown -R ${UID}:${GID} /go/src/k8s.io/kops/.build
-	docker cp nodeup-build-${UNIQUE}:/go/src/k8s.io/kops/.build/local/nodeup .build/dist/
+	docker exec nodeup-build-${UNIQUE} chown -R ${UID}:${GID} /go/src/github.com/harishsearce/kops/.build
+	docker cp nodeup-build-${UNIQUE}:/go/src/github.com/harishsearce/kops/.build/local/nodeup .build/dist/
 	(${SHASUMCMD} .build/dist/nodeup | cut -d' ' -f1) > .build/dist/nodeup.sha1
 
 .PHONY: dns-controller-gocode
 dns-controller-gocode:
-	go install ${GCFLAGS} -tags 'peer_name_alternative peer_name_hash' ${LDFLAGS}"${EXTRA_LDFLAGS} -X main.BuildVersion=${DNS_CONTROLLER_TAG}" k8s.io/kops/dns-controller/cmd/dns-controller
+	go install ${GCFLAGS} -tags 'peer_name_alternative peer_name_hash' ${LDFLAGS}"${EXTRA_LDFLAGS} -X main.BuildVersion=${DNS_CONTROLLER_TAG}" github.com/harishsearce/kops/dns-controller/cmd/dns-controller
 
 .PHONY: dns-controller-builder-image
 dns-controller-builder-image:
@@ -583,7 +583,7 @@ channels: ${CHANNELS}
 
 .PHONY: ${CHANNELS}
 ${CHANNELS}:
-	go build ${GCFLAGS} ${EXTRA_BUILDFLAGS} -o $@ ${LDFLAGS}"-X k8s.io/kops.Version=${VERSION} ${EXTRA_LDFLAGS}" k8s.io/kops/channels/cmd/channels
+	go build ${GCFLAGS} ${EXTRA_BUILDFLAGS} -o $@ ${LDFLAGS}"-X github.com/harishsearce/kops.Version=${VERSION} ${EXTRA_LDFLAGS}" github.com/harishsearce/kops/channels/cmd/channels
 
 # --------------------------------------------------
 # release tasks
@@ -601,7 +601,7 @@ release-github:
 
 .PHONY: examples
 examples: ${BINDATA_TARGETS} # Install kops API example
-	go install k8s.io/kops/examples/kops-api-example/...
+	go install github.com/harishsearce/kops/examples/kops-api-example/...
 
 # -----------------------------------------------------
 # api machinery regenerate
@@ -612,25 +612,25 @@ apimachinery: apimachinery-codegen goimports
 .PHONY: apimachinery-codegen
 apimachinery-codegen:
 	sh -c hack/make-apimachinery.sh
-	${GOPATH}/bin/conversion-gen ${API_OPTIONS} --skip-unsafe=true --input-dirs k8s.io/kops/pkg/apis/kops/v1alpha1 --v=0  --output-file-base=zz_generated.conversion \
+	${GOPATH}/bin/conversion-gen ${API_OPTIONS} --skip-unsafe=true --input-dirs github.com/harishsearce/kops/pkg/apis/kops/v1alpha1 --v=0  --output-file-base=zz_generated.conversion \
 		 --go-header-file "hack/boilerplate/boilerplate.go.txt"
-	${GOPATH}/bin/conversion-gen ${API_OPTIONS} --skip-unsafe=true --input-dirs k8s.io/kops/pkg/apis/kops/v1alpha2 --v=0  --output-file-base=zz_generated.conversion \
+	${GOPATH}/bin/conversion-gen ${API_OPTIONS} --skip-unsafe=true --input-dirs github.com/harishsearce/kops/pkg/apis/kops/v1alpha2 --v=0  --output-file-base=zz_generated.conversion \
 		 --go-header-file "hack/boilerplate/boilerplate.go.txt"
-	${GOPATH}/bin/deepcopy-gen ${API_OPTIONS} --input-dirs k8s.io/kops/pkg/apis/kops --v=0  --output-file-base=zz_generated.deepcopy \
+	${GOPATH}/bin/deepcopy-gen ${API_OPTIONS} --input-dirs github.com/harishsearce/kops/pkg/apis/kops --v=0  --output-file-base=zz_generated.deepcopy \
 		 --go-header-file "hack/boilerplate/boilerplate.go.txt"
-	${GOPATH}/bin/deepcopy-gen ${API_OPTIONS} --input-dirs k8s.io/kops/pkg/apis/kops/v1alpha1 --v=0  --output-file-base=zz_generated.deepcopy \
-	${GOPATH}/bin/deepcopy-gen ${API_OPTIONS} --input-dirs k8s.io/kops/pkg/apis/kops/v1alpha2 --v=0  --output-file-base=zz_generated.deepcopy \
+	${GOPATH}/bin/deepcopy-gen ${API_OPTIONS} --input-dirs github.com/harishsearce/kops/pkg/apis/kops/v1alpha1 --v=0  --output-file-base=zz_generated.deepcopy \
+	${GOPATH}/bin/deepcopy-gen ${API_OPTIONS} --input-dirs github.com/harishsearce/kops/pkg/apis/kops/v1alpha2 --v=0  --output-file-base=zz_generated.deepcopy \
 		 --go-header-file "hack/boilerplate/boilerplate.go.txt"
-	${GOPATH}/bin/defaulter-gen ${API_OPTIONS} --input-dirs k8s.io/kops/pkg/apis/kops/v1alpha1 --v=0  --output-file-base=zz_generated.defaults \
+	${GOPATH}/bin/defaulter-gen ${API_OPTIONS} --input-dirs github.com/harishsearce/kops/pkg/apis/kops/v1alpha1 --v=0  --output-file-base=zz_generated.defaults \
 		 --go-header-file "hack/boilerplate/boilerplate.go.txt"
-	${GOPATH}/bin/defaulter-gen ${API_OPTIONS} --input-dirs k8s.io/kops/pkg/apis/kops/v1alpha2 --v=0  --output-file-base=zz_generated.defaults \
+	${GOPATH}/bin/defaulter-gen ${API_OPTIONS} --input-dirs github.com/harishsearce/kops/pkg/apis/kops/v1alpha2 --v=0  --output-file-base=zz_generated.defaults \
 		 --go-header-file "hack/boilerplate/boilerplate.go.txt"
 	#go install github.com/ugorji/go/codec/codecgen
 	# codecgen works only if invoked from directory where the file is located.
 	#cd pkg/apis/kops/ && ~/k8s/bin/codecgen -d 1234 -o types.generated.go instancegroup.go cluster.go
-	${GOPATH}/bin/client-gen  ${API_OPTIONS} --input-base k8s.io/kops/pkg/apis/ --input="kops/,kops/v1alpha1,kops/v1alpha2" --clientset-path k8s.io/kops/pkg/client/clientset_generated/ \
+	${GOPATH}/bin/client-gen  ${API_OPTIONS} --input-base github.com/harishsearce/kops/pkg/apis/ --input="kops/,kops/v1alpha1,kops/v1alpha2" --clientset-path github.com/harishsearce/kops/pkg/client/clientset_generated/ \
 		 --go-header-file "hack/boilerplate/boilerplate.go.txt"
-	${GOPATH}/bin/client-gen  ${API_OPTIONS} --clientset-name="clientset" --input-base k8s.io/kops/pkg/apis/ --input="kops/,kops/v1alpha1,kops/v1alpha2" --clientset-path k8s.io/kops/pkg/client/clientset_generated/ \
+	${GOPATH}/bin/client-gen  ${API_OPTIONS} --clientset-name="clientset" --input-base github.com/harishsearce/kops/pkg/apis/ --input="kops/,kops/v1alpha1,kops/v1alpha2" --clientset-path github.com/harishsearce/kops/pkg/client/clientset_generated/ \
 		 --go-header-file "hack/boilerplate/boilerplate.go.txt"
 
 .PHONY: verify-apimachinery
@@ -642,14 +642,14 @@ verify-apimachinery:
 
 .PHONY: kops-server-docker-compile
 kops-server-docker-compile:
-	GOOS=linux GOARCH=amd64 go build ${GCFLAGS} -a ${EXTRA_BUILDFLAGS} -o ${DIST}/linux/amd64/kops-server ${LDFLAGS}"${EXTRA_LDFLAGS} -X k8s.io/kops-server.Version=${VERSION} -X k8s.io/kops-server.GitVersion=${GITSHA}" k8s.io/kops/cmd/kops-server
+	GOOS=linux GOARCH=amd64 go build ${GCFLAGS} -a ${EXTRA_BUILDFLAGS} -o ${DIST}/linux/amd64/kops-server ${LDFLAGS}"${EXTRA_LDFLAGS} -X github.com/harishsearce/kops-server.Version=${VERSION} -X github.com/harishsearce/kops-server.GitVersion=${GITSHA}" github.com/harishsearce/kops/cmd/kops-server
 
 .PHONY: kops-server-build
 kops-server-build:
 	# Compile the API binary in linux, and copy to local filesystem
 	docker pull golang:${GOVERSION}
-	docker run --name=kops-server-build-${UNIQUE} -e STATIC_BUILD=yes -e VERSION=${VERSION} -v ${GOPATH}/src:/go/src -v ${MAKEDIR}:/go/src/k8s.io/kops golang:${GOVERSION} make -C /go/src/k8s.io/kops/ kops-server-docker-compile
-	docker cp kops-server-build-${UNIQUE}:/go/src/k8s.io/kops/.build .
+	docker run --name=kops-server-build-${UNIQUE} -e STATIC_BUILD=yes -e VERSION=${VERSION} -v ${GOPATH}/src:/go/src -v ${MAKEDIR}:/go/src/github.com/harishsearce/kops golang:${GOVERSION} make -C /go/src/github.com/harishsearce/kops/ kops-server-docker-compile
+	docker cp kops-server-build-${UNIQUE}:/go/src/github.com/harishsearce/kops/.build .
 	docker build -t ${DOCKER_REGISTRY}/kops-server:${KOPS_SERVER_TAG} -f images/kops-server/Dockerfile .
 
 .PHONY: kops-server-push
