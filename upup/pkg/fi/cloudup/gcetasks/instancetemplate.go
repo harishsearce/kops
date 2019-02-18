@@ -229,6 +229,13 @@ func (e *InstanceTemplate) mapToGCE(project string) (*compute.InstanceTemplate, 
 		Type:       "PERSISTENT",
 	})
 
+	var accelerator []*compute.AcceleratorConfig
+
+	accelerator = append(accelerator, &compute.AcceleratorConfig{
+		AcceleratorCount: 1,
+		AcceleratorType: "nvidia-tesla-k80",
+	})
+
 	var tags *compute.Tags
 	if e.Tags != nil {
 		tags = &compute.Tags{
@@ -284,6 +291,8 @@ func (e *InstanceTemplate) mapToGCE(project string) (*compute.InstanceTemplate, 
 			CanIpForward: *e.CanIPForward,
 
 			Disks: disks,
+
+			GuestAccelerators: accelerator,
 
 			MachineType: *e.MachineType,
 
