@@ -111,6 +111,12 @@ type InstanceGroupSpec struct {
 	DetailedInstanceMonitoring *bool `json:"detailedInstanceMonitoring,omitempty"`
 	// IAMProfileSpec defines the identity of the cloud group iam profile (AWS only).
 	IAM *IAMProfileSpec `json:"iam,omitempty"`
+	// OnHostMaintenance
+	OnHostMaintenance string `json:"onHostMaintenance,omitempty"`
+	// AcceleratorType is the type of GPU
+	AcceleratorType *int32 `json:"acceleratorType,omitempty"`
+	// AcceleratorCount is the required GPUs per node
+	AcceleratorCount string `json:"acceleratorCount,omitempty"`
 }
 
 // UserData defines a user-data section

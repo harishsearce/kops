@@ -61,7 +61,11 @@ type InstanceTemplate struct {
 	Scopes []string
 
 	Metadata    map[string]*fi.ResourceHolder
-	MachineType *string
+
+	OnHostMaintenance *string
+
+	AcceleratorType  *string
+	AcceleratorCount *int32
 
 	// ID is the actual name
 	ID *string
@@ -106,6 +110,9 @@ func (e *InstanceTemplate) Find(c *fi.Context) (*InstanceTemplate, error) {
 			actual.Tags = append(actual.Tags, tag)
 		}
 		actual.MachineType = fi.String(lastComponent(p.MachineType))
+		actual.OnHostMaintenance = fi.String(lastComponent(p.OnHostMaintenance))
+		actual.AcceleratorType = fi.String(lastComponent(p.AcceleratorType))
+		actual.AcceleratorCount = fi.String(lastComponent(p.AcceleratorCount))
 		actual.CanIPForward = &p.CanIpForward
 
 		bootDiskImage, err := ShortenImageURL(cloud.Project(), p.Disks[0].InitializeParams.SourceImage)
@@ -195,7 +202,10 @@ func (_ *InstanceTemplate) CheckChanges(a, e, changes *InstanceTemplate) error {
 func (e *InstanceTemplate) mapToGCE(project string) (*compute.InstanceTemplate, error) {
 	// TODO: This is similar to Instance...
 	var scheduling *compute.Scheduling
-
+	var on_host_maintenance = "MIGRATE"
+	if e.OnHostMaintenance != nil {
+		on_host_maintenance = *e.OnHostMaintenance
+	}
 	if fi.BoolValue(e.Preemptible) {
 		scheduling = &compute.Scheduling{
 			AutomaticRestart:  fi.Bool(false),
@@ -206,7 +216,7 @@ func (e *InstanceTemplate) mapToGCE(project string) (*compute.InstanceTemplate, 
 		scheduling = &compute.Scheduling{
 			AutomaticRestart: fi.Bool(true),
 			// TODO: Migrate or terminate?
-			OnHostMaintenance: "MIGRATE",
+			OnHostMaintenance: on_host_maintenance,
 			Preemptible:       false,
 		}
 	}
@@ -227,6 +237,13 @@ func (e *InstanceTemplate) mapToGCE(project string) (*compute.InstanceTemplate, 
 		AutoDelete: true,
 		Mode:       "READ_WRITE",
 		Type:       "PERSISTENT",
+	})
+
+	var accelerator []*compute.AcceleratorConfig
+
+	accelerator = append(accelerator, &compute.AcceleratorConfig{
+		AcceleratorCount: *e.AcceleratorCount,
+		AcceleratorType: *e.AcceleratorType,
 	})
 
 	var tags *compute.Tags
@@ -284,6 +301,8 @@ func (e *InstanceTemplate) mapToGCE(project string) (*compute.InstanceTemplate, 
 			CanIpForward: *e.CanIPForward,
 
 			Disks: disks,
+
+			GuestAccelerators: accelerator,
 
 			MachineType: *e.MachineType,
 
