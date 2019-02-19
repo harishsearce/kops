@@ -113,7 +113,7 @@ func (e *InstanceTemplate) Find(c *fi.Context) (*InstanceTemplate, error) {
 		actual.MachineType = fi.String(lastComponent(p.MachineType))
 		actual.OnHostMaintenance = fi.String(lastComponent(p.OnHostMaintenance))
 		actual.AcceleratorType = fi.String(lastComponent(p.AcceleratorType))
-		actual.AcceleratorCount = fi.Int64Var(p.AcceleratorCount)
+		actual.AcceleratorCount = &p.AcceleratorCount
 		actual.CanIPForward = &p.CanIpForward
 
 		bootDiskImage, err := ShortenImageURL(cloud.Project(), p.Disks[0].InitializeParams.SourceImage)
