@@ -295,7 +295,7 @@ func (e *InstanceTemplate) mapToGCE(project string) (*compute.InstanceTemplate, 
 	accelerator_type, at_check := os.LookupEnv("ACCELERATOR_TYPE")
 	accelerator_count, ac_check := os.LookupEnv("ACCELERATOR_COUNT")
 
-	if (at_check && ac_check && accelerator_type == "TERMINATE") {
+	if (at_check && ac_check && on_host_maintenance == "TERMINATE") {
 		acv, err := strconv.ParseInt(accelerator_count, 10, 64)
 		var accelerator []*compute.AcceleratorConfig
 
