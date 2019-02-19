@@ -89,6 +89,8 @@ func (e *InstanceTemplate) Find(c *fi.Context) (*InstanceTemplate, error) {
 		return nil, fmt.Errorf("error listing InstanceTemplates: %v", err)
 	}
 
+	fmt.Printf("%+v\n", response)
+	fmt.Printf("%+v\n", e)
 	expected, err := e.mapToGCE(cloud.Project())
 	if err != nil {
 		return nil, err
@@ -378,7 +380,6 @@ func (e *InstanceTemplate) URL(project string) (string, error) {
 
 func (_ *InstanceTemplate) RenderGCE(t *gce.GCEAPITarget, a, e, changes *InstanceTemplate) error {
 	project := t.Cloud.Project()
-
 	i, err := e.mapToGCE(project)
 	if err != nil {
 		return err
