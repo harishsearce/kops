@@ -18,6 +18,7 @@ package gcetasks
 
 import (
 	"fmt"
+	"os"
 	"reflect"
 	"sort"
 	"strconv"
@@ -204,6 +205,8 @@ func (_ *InstanceTemplate) CheckChanges(a, e, changes *InstanceTemplate) error {
 
 func (e *InstanceTemplate) mapToGCE(project string) (*compute.InstanceTemplate, error) {
 	// TODO: This is similar to Instance...
+
+	fmt.Printf("Cluster name harish - %+v\n", os.Getenv("CLUSTER_NAME"))
 	fmt.Printf("%+v\n", project)
 	fmt.Printf("%+v\n", e)
 	var scheduling *compute.Scheduling
