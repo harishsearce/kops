@@ -294,19 +294,13 @@ func (e *InstanceTemplate) mapToGCE(project string) (*compute.InstanceTemplate, 
 
 	accelerator_type, at_check := os.LookupEnv("ACCELERATOR_TYPE")
 	accelerator_count, ac_check := os.LookupEnv("ACCELERATOR_COUNT")
-	fmt.Printf("on_host_maintenance %v\n", on_host_maintenance)
-	fmt.Printf("AT CHECK %v\n", at_check)
-	fmt.Printf("AC CHECK %v\n", ac_check)
-	fmt.Printf("AT %v\n", accelerator_type)
-	fmt.Printf("AC %v\n", accelerator_count)
+
 	if at_check && ac_check && on_host_maintenance == "TERMINATE" {
-		fmt.Printf("I AM IN\n")
+
 		acv, err := strconv.ParseInt(accelerator_count, 10, 64)
 		var accelerator []*compute.AcceleratorConfig
-		fmt.Printf("acv %v\n", acv)
-		fmt.Printf("acv err %v\n", err)
-		if err != nil {
-			fmt.Printf("I AM IN 2\n")
+
+		if err == nil {
 			accelerator = append(accelerator, &compute.AcceleratorConfig{
 				AcceleratorCount: acv,
 				AcceleratorType: accelerator_type,
@@ -340,12 +334,6 @@ func (e *InstanceTemplate) mapToGCE(project string) (*compute.InstanceTemplate, 
 		}
 		return i, nil
 	} else {
-		fmt.Printf("I AM OUT\n")
-		fmt.Printf("on_host_maintenance %v\n", on_host_maintenance)
-		fmt.Printf("AT CHECK %v\n", at_check)
-		fmt.Printf("AC CHECK %v\n", ac_check)
-		fmt.Printf("AT %v\n", accelerator_type)
-		fmt.Printf("AC %v\n", accelerator_count)
 		i := &compute.InstanceTemplate{
 			Kind: "compute#instanceTemplate",
 			Properties: &compute.InstanceProperties{
