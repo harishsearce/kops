@@ -298,7 +298,7 @@ func (e *InstanceTemplate) mapToGCE(project string) (*compute.InstanceTemplate, 
 	if (at_check && ac_check) {
 		var accelerator []*compute.AcceleratorConfig
 		accelerator = append(accelerator, &compute.AcceleratorConfig{
-			AcceleratorCount: accelerator_count,
+			AcceleratorCount: fi.int64(accelerator_count),
 			AcceleratorType: accelerator_type,
 		})
 		i := &compute.InstanceTemplate{
@@ -326,6 +326,7 @@ func (e *InstanceTemplate) mapToGCE(project string) (*compute.InstanceTemplate, 
 				Tags: tags,
 			},
 		}
+		return i, nil
 	} else {
 		i := &compute.InstanceTemplate{
 			Kind: "compute#instanceTemplate",
@@ -350,11 +351,9 @@ func (e *InstanceTemplate) mapToGCE(project string) (*compute.InstanceTemplate, 
 				Tags: tags,
 			},
 		}
+		return i, nil
 	}
 
-
-
-	return i, nil
 }
 
 type ByKey []*compute.MetadataItems
