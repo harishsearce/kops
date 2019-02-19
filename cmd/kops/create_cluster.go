@@ -651,8 +651,8 @@ func RunCreateCluster(f *util.Factory, out io.Writer, c *CreateClusterOptions) e
 			g.Spec.Role = api.InstanceGroupRoleMaster
 			g.Spec.MinSize = fi.Int32(1)
 			g.Spec.MaxSize = fi.Int32(1)
-			g.Spec.OnHostMaintenance = fi.String(c.OnHostMaintenance)
-			g.Spec.AcceleratorType = fi.String(c.AcceleratorType)
+			g.Spec.OnHostMaintenance = c.OnHostMaintenance
+			g.Spec.AcceleratorType = fc.AcceleratorType
 			g.Spec.AcceleratorCount = fi.Int64(c.AcceleratorCount)
 			g.ObjectMeta.Name = "master-" + name
 
