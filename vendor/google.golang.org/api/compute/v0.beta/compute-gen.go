@@ -12023,8 +12023,11 @@ type InstanceProperties struct {
 	// AcceleratorType
 	AcceleratorType string `json:"machineType,omitempty"`
 
+	// OnHostMaintenance
+	OnHostMaintenance string `json:"machineType,omitempty"`
+
 	// AcceleratorCount
-	AcceleratorCount int64 `json:"machineType,omitempty"` 
+	AcceleratorCount int64 `json:"machineType,omitempty"`
 
 	// Metadata: The metadata key/value pairs to assign to instances that
 	// are created from this template. These pairs can consist of custom
