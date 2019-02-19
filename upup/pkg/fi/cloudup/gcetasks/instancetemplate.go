@@ -292,7 +292,8 @@ func (e *InstanceTemplate) mapToGCE(project string) (*compute.InstanceTemplate, 
 			Value: fi.String(v),
 		})
 	}
-
+  var accelerator_type string
+  var accelerator_count string
 	accelerator_type = os.LookupEnv("ACCELERATOR_TYPE")
 	accelerator_count = os.LookupEnv("ACCELERATOR_COUNT")
 	if (accelerator_type && accelerator_count) {
