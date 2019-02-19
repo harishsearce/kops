@@ -297,10 +297,11 @@ func (e *InstanceTemplate) mapToGCE(project string) (*compute.InstanceTemplate, 
 	accelerator_count, ac_check := os.LookupEnv("ACCELERATOR_COUNT")
 	fmt.Printf("error rendering InstanceTemplate metadata  %v", accelerator_count)
 	if (at_check && ac_check) {
-		accelerator_count = strconv.ParseInt(accelerator_count, 10, 64)
+		var ac int64
+		ac = fi.Int64Var(accelerator_count)
 		var accelerator []*compute.AcceleratorConfig
 		accelerator = append(accelerator, &compute.AcceleratorConfig{
-			AcceleratorCount: accelerator_count,
+			AcceleratorCount: ac,
 			AcceleratorType: accelerator_type,
 		})
 		i := &compute.InstanceTemplate{
