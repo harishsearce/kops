@@ -326,8 +326,7 @@ func (e *InstanceTemplate) mapToGCE(project string) (*compute.InstanceTemplate, 
 				Tags: tags,
 			},
 		}
-	}
-	else{
+	} else {
 		i := &compute.InstanceTemplate{
 			Kind: "compute#instanceTemplate",
 			Properties: &compute.InstanceProperties{
