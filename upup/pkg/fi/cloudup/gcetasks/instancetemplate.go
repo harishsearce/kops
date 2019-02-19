@@ -205,14 +205,11 @@ func (_ *InstanceTemplate) CheckChanges(a, e, changes *InstanceTemplate) error {
 
 func (e *InstanceTemplate) mapToGCE(project string) (*compute.InstanceTemplate, error) {
 	// TODO: This is similar to Instance...
-
-	fmt.Printf("Cluster name harish - %+v\n", os.Getenv("CLUSTER_NAME"))
-	fmt.Printf("%+v\n", project)
-	fmt.Printf("%+v\n", e)
 	var scheduling *compute.Scheduling
 	var on_host_maintenance = "MIGRATE"
-	if e.OnHostMaintenance != nil {
-		on_host_maintenance = *e.OnHostMaintenance
+	on_host_maintenance_val, ohm_check := os.LookupEnv("ON_HOST_MAINTENANCE")
+	if (ohm_check) {
+		on_host_maintenance = on_host_maintenance_val
 	}
 	if fi.BoolValue(e.Preemptible) {
 		scheduling = &compute.Scheduling{
@@ -245,13 +242,6 @@ func (e *InstanceTemplate) mapToGCE(project string) (*compute.InstanceTemplate, 
 		AutoDelete: true,
 		Mode:       "READ_WRITE",
 		Type:       "PERSISTENT",
-	})
-
-	var accelerator []*compute.AcceleratorConfig
-
-	accelerator = append(accelerator, &compute.AcceleratorConfig{
-		AcceleratorCount: *e.AcceleratorCount,
-		AcceleratorType: *e.AcceleratorType,
 	})
 
 	var tags *compute.Tags
@@ -303,31 +293,67 @@ func (e *InstanceTemplate) mapToGCE(project string) (*compute.InstanceTemplate, 
 		})
 	}
 
-	i := &compute.InstanceTemplate{
-		Kind: "compute#instanceTemplate",
-		Properties: &compute.InstanceProperties{
-			CanIpForward: *e.CanIPForward,
+	accelerator_type, at_check := os.LookupEnv("ACCELERATOR_TYPE")
+	accelerator_count, ac_check := os.LookupEnv("ACCELERATOR_COUNT")
+	if (at_check && ac_check) {
+		var accelerator []*compute.AcceleratorConfig
+		accelerator = append(accelerator, &compute.AcceleratorConfig{
+			AcceleratorCount: accelerator_count,
+			AcceleratorType: accelerator_type,
+		})
+		i := &compute.InstanceTemplate{
+			Kind: "compute#instanceTemplate",
+			Properties: &compute.InstanceProperties{
+				CanIpForward: *e.CanIPForward,
 
-			Disks: disks,
+				Disks: disks,
 
-			GuestAccelerators: accelerator,
+				GuestAccelerators: accelerator,
 
-			MachineType: *e.MachineType,
+				MachineType: *e.MachineType,
 
-			Metadata: &compute.Metadata{
-				Kind:  "compute#metadata",
-				Items: metadataItems,
+				Metadata: &compute.Metadata{
+					Kind:  "compute#metadata",
+					Items: metadataItems,
+				},
+
+				NetworkInterfaces: networkInterfaces,
+
+				Scheduling: scheduling,
+
+				ServiceAccounts: serviceAccounts,
+
+				Tags: tags,
 			},
-
-			NetworkInterfaces: networkInterfaces,
-
-			Scheduling: scheduling,
-
-			ServiceAccounts: serviceAccounts,
-
-			Tags: tags,
-		},
+		}
 	}
+	else{
+		i := &compute.InstanceTemplate{
+			Kind: "compute#instanceTemplate",
+			Properties: &compute.InstanceProperties{
+				CanIpForward: *e.CanIPForward,
+
+				Disks: disks,
+
+				MachineType: *e.MachineType,
+
+				Metadata: &compute.Metadata{
+					Kind:  "compute#metadata",
+					Items: metadataItems,
+				},
+
+				NetworkInterfaces: networkInterfaces,
+
+				Scheduling: scheduling,
+
+				ServiceAccounts: serviceAccounts,
+
+				Tags: tags,
+			},
+		}
+	}
+
+
 
 	return i, nil
 }
