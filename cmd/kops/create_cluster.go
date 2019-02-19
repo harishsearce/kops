@@ -309,7 +309,7 @@ func NewCmdCreateCluster(f *util.Factory, out io.Writer) *cobra.Command {
 	cmd.Flags().StringSliceVar(&options.SSHAccess, "ssh-access", options.SSHAccess, "Restrict SSH access to this CIDR.  If not set, access will not be restricted by IP. (default [0.0.0.0/0])")
 	cmd.Flags().StringVar(&options.OnHostMaintenance, "host-maintenance", options.OnHostMaintenance, "PREMPTIBLE/TERMINATE")
 	cmd.Flags().StringVar(&options.AcceleratorType, "accelerator-type", options.AcceleratorType, "nvidia-tesla-k80, nvidia-tesla-p100, nvidia-tesla-p4, nvidia-tesla-v100, or nvidia-tesla-t4")
-	cmd.Flags().StringVar(&options.AcceleratorCount, "accelerator-count", options.AcceleratorCount, "GPUs per node")
+	cmd.Flags().Int64Var(&options.AcceleratorCount, "accelerator-count", options.AcceleratorCount, "GPUs per node")
 
 	// TODO: Can we deprecate this flag - it is awkward?
 	cmd.Flags().BoolVar(&associatePublicIP, "associate-public-ip", false, "Specify --associate-public-ip=[true|false] to enable/disable association of public IP for master ASG and nodes. Default is 'true'.")
