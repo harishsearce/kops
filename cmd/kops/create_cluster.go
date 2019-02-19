@@ -91,7 +91,7 @@ type CreateClusterOptions struct {
 	//Accelerator changes
 	OnHostMaintenance    string
 	AcceleratorType      string
-	AcceleratorCount     int32
+	AcceleratorCount     int64
 
 	// SSHPublicKeys is a map of the SSH public keys we should configure; required on AWS, not required on GCE
 	SSHPublicKeys map[string][]byte
