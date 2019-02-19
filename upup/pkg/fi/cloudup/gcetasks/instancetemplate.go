@@ -298,7 +298,7 @@ func (e *InstanceTemplate) mapToGCE(project string) (*compute.InstanceTemplate, 
 	if (at_check && ac_check) {
 		var accelerator []*compute.AcceleratorConfig
 		accelerator = append(accelerator, &compute.AcceleratorConfig{
-			AcceleratorCount: fi.int64(accelerator_count),
+			AcceleratorCount: fi.Int64(accelerator_count),
 			AcceleratorType: accelerator_type,
 		})
 		i := &compute.InstanceTemplate{
