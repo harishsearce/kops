@@ -61,6 +61,7 @@ type InstanceTemplate struct {
 	Scopes []string
 
 	Metadata    map[string]*fi.ResourceHolder
+	MachineType *string
 
 	OnHostMaintenance *string
 
