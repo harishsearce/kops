@@ -333,6 +333,11 @@ func (e *InstanceTemplate) mapToGCE(project string) (*compute.InstanceTemplate, 
 		}
 		return i, nil
 	} else {
+		fmt.Printf("on_host_maintenance %v\n", on_host_maintenance)
+		fmt.Printf("AT CHECK %v\n", at_check)
+		fmt.Printf("AC CHECK %v\n", ac_check)
+		fmt.Printf("AT %v\n", accelerator_type)
+		fmt.Printf("AC %v\n", accelerator_count)
 		i := &compute.InstanceTemplate{
 			Kind: "compute#instanceTemplate",
 			Properties: &compute.InstanceProperties{
