@@ -65,7 +65,7 @@ type InstanceTemplate struct {
 	OnHostMaintenance *string
 
 	AcceleratorType  *string
-	AcceleratorCount *int32
+	AcceleratorCount *int64
 
 	// ID is the actual name
 	ID *string
