@@ -209,7 +209,7 @@ func (e *InstanceTemplate) mapToGCE(project string) (*compute.InstanceTemplate, 
 	if (ohm_check) {
 		on_host_maintenance = on_host_maintenance_val
 	}
-	fmt.Printf("Host Maintenance %v\n", on_host_maintenance)
+	
 	if fi.BoolValue(e.Preemptible) {
 		scheduling = &compute.Scheduling{
 			AutomaticRestart:  fi.Bool(false),
@@ -306,7 +306,7 @@ func (e *InstanceTemplate) mapToGCE(project string) (*compute.InstanceTemplate, 
 				AcceleratorType: accelerator_type,
 			})
 		}
-		fmt.Printf("accelerator obj %v\n", accelerator)
+
 		i := &compute.InstanceTemplate{
 			Kind: "compute#instanceTemplate",
 			Properties: &compute.InstanceProperties{
