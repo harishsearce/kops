@@ -114,9 +114,9 @@ type InstanceGroupSpec struct {
 	// OnHostMaintenance
 	OnHostMaintenance string `json:"onHostMaintenance,omitempty"`
 	// AcceleratorType is the type of GPU
-	AcceleratorType *int32 `json:"acceleratorType,omitempty"`
+	AcceleratorType string `json:"acceleratorType,omitempty"`
 	// AcceleratorCount is the required GPUs per node
-	AcceleratorCount string `json:"acceleratorCount,omitempty"`
+	AcceleratorCount *int64 `json:"acceleratorCount,omitempty"`
 }
 
 // UserData defines a user-data section
