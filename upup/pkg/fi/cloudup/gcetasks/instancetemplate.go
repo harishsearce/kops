@@ -300,7 +300,7 @@ func (e *InstanceTemplate) mapToGCE(project string) (*compute.InstanceTemplate, 
 		acv, err := strconv.ParseInt(accelerator_count, 10, 64)
 		var accelerator []*compute.AcceleratorConfig
 
-		if !err {
+		if err != nil {
 			accelerator = append(accelerator, &compute.AcceleratorConfig{
 				AcceleratorCount: acv,
 				AcceleratorType: accelerator_type,
