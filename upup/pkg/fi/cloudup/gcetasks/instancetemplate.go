@@ -202,6 +202,7 @@ func (_ *InstanceTemplate) CheckChanges(a, e, changes *InstanceTemplate) error {
 
 func (e *InstanceTemplate) mapToGCE(project string) (*compute.InstanceTemplate, error) {
 	// TODO: This is similar to Instance...
+	fmt.Printf("%+v\n", e)
 	var scheduling *compute.Scheduling
 	var on_host_maintenance = "MIGRATE"
 	if e.OnHostMaintenance != nil {
