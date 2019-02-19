@@ -298,7 +298,7 @@ func (e *InstanceTemplate) mapToGCE(project string) (*compute.InstanceTemplate, 
 	fmt.Printf("error rendering InstanceTemplate metadata  %v", accelerator_count)
 	if (at_check && ac_check) {
 		var ac int64
-		ac = fi.Int64Var(accelerator_count)
+		ac = os.Getenv("ACCELERATOR_COUNT")
 		var accelerator []*compute.AcceleratorConfig
 		accelerator = append(accelerator, &compute.AcceleratorConfig{
 			AcceleratorCount: ac,
