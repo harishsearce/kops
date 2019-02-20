@@ -21,6 +21,7 @@ limitations under the License.
 package kops
 
 import (
+	"fmt"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	runtime "k8s.io/apimachinery/pkg/runtime"
 )
