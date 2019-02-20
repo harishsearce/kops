@@ -773,13 +773,8 @@ func RunCreateCluster(f *util.Factory, out io.Writer, c *CreateClusterOptions) e
 
 	if c.AcceleratorType != "" {
 		for _, group := range instanceGroups {
-			group.Spec.OnHostMaintenance = c.OnHostMaintenance
-			group.Spec.AcceleratorType = c.AcceleratorType
-			group.Spec.AcceleratorCount = fi.Int64(c.AcceleratorCount)
-		}
-		for _, group := range masters {
-			group.Spec.OnHostMaintenance = c.OnHostMaintenance
-			group.Spec.AcceleratorType = c.AcceleratorType
+			group.Spec.OnHostMaintenance = fi.StringVar(c.OnHostMaintenance)
+			group.Spec.AcceleratorType = fi.StringVar(c.AcceleratorType)
 			group.Spec.AcceleratorCount = fi.Int64(c.AcceleratorCount)
 		}
 	}
