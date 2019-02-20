@@ -191,7 +191,7 @@ func RunCreate(f *util.Factory, out io.Writer, c *CreateOptions) error {
 				fmt.Printf("ObjectMeta%v\n", v.ObjectMeta)
 				fmt.Printf("Spec%v\n", v.Spec)
 				fmt.Printf("AcceleratorType%v\n", v.Spec.AcceleratorType)
-				fmt.Printf("StringAcceleratorType%v\n", string(v.Spec.AcceleratorType))
+				//fmt.Printf("StringAcceleratorType%v\n", string(v.Spec.AcceleratorType))
 				clusterName = v.ObjectMeta.Labels[kopsapi.LabelClusterName]
 				if clusterName == "" {
 					return fmt.Errorf("must specify %q label with cluster name to create instanceGroup", kopsapi.LabelClusterName)
