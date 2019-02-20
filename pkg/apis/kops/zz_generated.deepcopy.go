@@ -1803,11 +1803,11 @@ func (in *InstanceGroupSpec) DeepCopyInto(out *InstanceGroupSpec) {
 	}
 	if in.OnHostMaintenance != nil {
 		in, out := &in.OnHostMaintenance, &out.OnHostMaintenance
-		if *in == nil {
-			*out = nil
+		if in == nil {
+			out = nil
 		} else {
-			*out = new(string)
-			**out = **in
+			out = new(string)
+			*out = *in
 		}
 	}
 
