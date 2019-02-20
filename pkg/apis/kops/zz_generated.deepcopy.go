@@ -1806,7 +1806,7 @@ func (in *InstanceGroupSpec) DeepCopyInto(out *InstanceGroupSpec) {
 		if *in == nil {
 			*out = nil
 		} else {
-			*out = new(string)
+			*out = new(*string)
 			**out = **in
 		}
 	}
@@ -1816,7 +1816,7 @@ func (in *InstanceGroupSpec) DeepCopyInto(out *InstanceGroupSpec) {
 		if *in == nil {
 			*out = nil
 		} else {
-			*out = new(string)
+			*out = new(*string)
 			**out = **in
 		}
 	}
