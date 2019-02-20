@@ -142,6 +142,7 @@ func RunCreate(f *util.Factory, out io.Writer, c *CreateOptions) error {
 				return fmt.Errorf("error reading file %q: %v", f, err)
 			}
 		}
+		fmt.Printf("%v\n", contents)
 		// TODO: this does not support a JSON array
 		sections := bytes.Split(bytes.Replace(contents, []byte("\r\n"), []byte("\n"), -1), []byte("\n---\n"))
 		for _, section := range sections {
