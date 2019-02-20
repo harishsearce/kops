@@ -1801,20 +1801,20 @@ func (in *InstanceGroupSpec) DeepCopyInto(out *InstanceGroupSpec) {
 			**out = **in
 		}
 	}
-	if in.OnHostMaintenance != "" {
+	if in.OnHostMaintenance != nil {
 		in, out := &in.OnHostMaintenance, &out.OnHostMaintenance
-		if *in == "" {
-			*out = ""
+		if *in == nil {
+			*out = nil
 		} else {
 			*out = new(string)
 			**out = **in
 		}
 	}
 
-	if in.AcceleratorType != "" {
+	if in.AcceleratorType != nil {
 		in, out := &in.AcceleratorType, &out.AcceleratorType
-		if *in == "" {
-			*out = ""
+		if *in == nil {
+			*out = nil
 		} else {
 			*out = new(string)
 			**out = **in
