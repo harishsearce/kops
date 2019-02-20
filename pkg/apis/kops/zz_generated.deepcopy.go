@@ -1801,7 +1801,7 @@ func (in *InstanceGroupSpec) DeepCopyInto(out *InstanceGroupSpec) {
 			**out = **in
 		}
 	}
-	if in.OnHostMaintenance != nil {
+	if in.OnHostMaintenance != "" {
 		in, out := &in.OnHostMaintenance, &out.OnHostMaintenance
 		if *in == nil {
 			*out = nil
@@ -1811,7 +1811,7 @@ func (in *InstanceGroupSpec) DeepCopyInto(out *InstanceGroupSpec) {
 		}
 	}
 
-	if in.AcceleratorType != nil {
+	if in.AcceleratorType != "" {
 		in, out := &in.AcceleratorType, &out.AcceleratorType
 		if *in == nil {
 			*out = nil
