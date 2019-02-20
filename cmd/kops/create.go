@@ -159,6 +159,17 @@ func RunCreate(f *util.Factory, out io.Writer, c *CreateOptions) error {
 			fmt.Printf("1%v\n", o)
 			fmt.Printf("2%v\n", gvk)
 			fmt.Printf("3%v\n", err)
+			defaults2 := &schema.GroupVersionKind{
+				Group:   v1alpha2.SchemeGroupVersion.Group,
+				Version: v1alpha2.SchemeGroupVersion.Version,
+			}
+			o2, gvk2, err2 := codec.Decode(section, defaults2, nil)
+			if err != nil {
+				fmt.Errorf("error parsing file %q: %v", f, err2)
+			}
+			fmt.Printf("11%v\n", o)
+			fmt.Printf("22%v\n", gvk)
+			fmt.Printf("33%v\n", err)
 			switch v := o.(type) {
 			case *kopsapi.Cluster:
 				// Adding a PerformAssignments() call here as the user might be trying to use
