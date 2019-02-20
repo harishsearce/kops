@@ -2060,6 +2060,9 @@ func autoConvert_v1alpha2_InstanceGroupSpec_To_kops_InstanceGroupSpec(in *Instan
 	out.Image = in.Image
 	out.MinSize = in.MinSize
 	out.MaxSize = in.MaxSize
+	out.OnHostMaintenance = in.OnHostMaintenance
+	out.AcceleratorType = in.AcceleratorType
+	out.AcceleratorCount = in.AcceleratorCount
 	out.MachineType = in.MachineType
 	out.RootVolumeSize = in.RootVolumeSize
 	out.RootVolumeType = in.RootVolumeType
