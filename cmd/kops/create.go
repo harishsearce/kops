@@ -154,9 +154,9 @@ func RunCreate(f *util.Factory, out io.Writer, c *CreateOptions) error {
 			if err != nil {
 				return fmt.Errorf("error parsing file %q: %v", f, err)
 			}
-			fmt.Printf("%v\n", o)
-			fmt.Printf("%v\n", gvk)
-			fmt.Printf("%v\n", err)
+			fmt.Printf("1%v\n", o)
+			fmt.Printf("2%v\n", gvk)
+			fmt.Printf("3%v\n", err)
 			switch v := o.(type) {
 			case *kopsapi.Cluster:
 				// Adding a PerformAssignments() call here as the user might be trying to use
@@ -177,7 +177,9 @@ func RunCreate(f *util.Factory, out io.Writer, c *CreateOptions) error {
 				}
 
 			case *kopsapi.InstanceGroup:
-				fmt.Printf("%v\n", v)
+				fmt.Printf("4%v\n", v)
+				fmt.Printf("ObjectMeta%v\n", v.ObjectMeta)
+				fmt.Printf("Spec%v\n", v.Spec)
 				clusterName = v.ObjectMeta.Labels[kopsapi.LabelClusterName]
 				if clusterName == "" {
 					return fmt.Errorf("must specify %q label with cluster name to create instanceGroup", kopsapi.LabelClusterName)
