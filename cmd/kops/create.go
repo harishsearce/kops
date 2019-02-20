@@ -153,7 +153,7 @@ func RunCreate(f *util.Factory, out io.Writer, c *CreateOptions) error {
 			if err != nil {
 				return fmt.Errorf("error parsing file %q: %v", f, err)
 			}
-			fmt.Printf("%v\n", _)
+
 			fmt.Printf("%v\n", section)
 			switch v := o.(type) {
 			case *kopsapi.Cluster:
