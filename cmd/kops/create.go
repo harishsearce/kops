@@ -144,7 +144,7 @@ func RunCreate(f *util.Factory, out io.Writer, c *CreateOptions) error {
 		}
 
 
-		fmt.Printf("1%v\n", string(o))
+		fmt.Printf("1%v\n", string(contents))
 		// TODO: this does not support a JSON array
 		sections := bytes.Split(bytes.Replace(contents, []byte("\r\n"), []byte("\n"), -1), []byte("\n---\n"))
 		for _, section := range sections {
