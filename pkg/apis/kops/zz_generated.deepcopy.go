@@ -1806,7 +1806,7 @@ func (in *InstanceGroupSpec) DeepCopyInto(out *InstanceGroupSpec) {
 		if *in == "" {
 			*out = ""
 		} else {
-			*out = new(string)
+			*out = new(*string)
 			**out = **in
 		}
 	}
