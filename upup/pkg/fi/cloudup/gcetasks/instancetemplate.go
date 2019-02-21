@@ -122,6 +122,7 @@ func (e *InstanceTemplate) Find(c *fi.Context) (*InstanceTemplate, error) {
 		actual.AcceleratorType = fi.String(lastComponent(p.AcceleratorType))
 		actual.AcceleratorCount = &p.AcceleratorCount
 		actual.CanIPForward = &p.CanIpForward
+		actual.GuestAccelerators = &p.GuestAccelerators
 
 		bootDiskImage, err := ShortenImageURL(cloud.Project(), p.Disks[0].InitializeParams.SourceImage)
 		if err != nil {
