@@ -102,6 +102,9 @@ type InstanceGroupSpec struct {
 	DetailedInstanceMonitoring *bool `json:"detailedInstanceMonitoring,omitempty"`
 	// IAMProfileSpec defines the identity of the cloud group iam profile (AWS only).
 	IAM *IAMProfileSpec `json:"iam,omitempty"`
+	// GuestAccelerators: A list of the type and count of accelerator cards
+	// attached to the instance.
+	GuestAccelerators []*AcceleratorConfig `json:"guestAccelerators,omitempty"`
 	// OnHostMaintenance
 	OnHostMaintenance *string `json:"onHostMaintenance,omitempty"`
 	// AcceleratorType is the type of GPU
@@ -110,6 +113,36 @@ type InstanceGroupSpec struct {
 	AcceleratorCount *int64 `json:"acceleratorCount,omitempty"`
 	// SecurityGroupOverride overrides the default security group created by Kops for this IG (AWS only).
 	SecurityGroupOverride *string `json:"securityGroupOverride,omitempty"`
+}
+
+// AcceleratorConfig: A specification of the type and number of
+// accelerator cards attached to the instance.
+type AcceleratorConfig struct {
+	// AcceleratorCount: The number of the guest accelerator cards exposed
+	// to this instance.
+	AcceleratorCount int64 `json:"acceleratorCount,omitempty"`
+
+	// AcceleratorType: Full or partial URL of the accelerator type resource
+	// to attach to this instance. If you are creating an instance template,
+	// specify only the accelerator name.
+	AcceleratorType string `json:"acceleratorType,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "AcceleratorCount") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+
+	// NullFields is a list of field names (e.g. "AcceleratorCount") to
+	// include in API requests with the JSON null value. By default, fields
+	// with empty values are omitted from API requests. However, any field
+	// with an empty value appearing in NullFields will be sent to the
+	// server as null. It is an error if a field in this list has a
+	// non-empty value. This may be used to include null fields in Patch
+	// requests.
+	NullFields []string `json:"-"`
 }
 
 // IAMProfileSpec is the AWS IAM Profile to attach to instances in this instance
