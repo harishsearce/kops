@@ -64,7 +64,7 @@ type InstanceTemplate struct {
 	Metadata    map[string]*fi.ResourceHolder
 	MachineType *string
 
-	GuestAccelerators []string
+	GuestAccelerators []*AcceleratorConfig
 
 	OnHostMaintenance *string
 
@@ -73,6 +73,19 @@ type InstanceTemplate struct {
 
 	// ID is the actual name
 	ID *string
+}
+
+// AcceleratorConfig: A specification of the type and number of
+// accelerator cards attached to the instance.
+type AcceleratorConfig struct {
+	// AcceleratorCount: The number of the guest accelerator cards exposed
+	// to this instance.
+	AcceleratorCount int64 `json:"acceleratorCount,omitempty"`
+
+	// AcceleratorType: Full or partial URL of the accelerator type resource
+	// to attach to this instance. If you are creating an instance template,
+	// specify only the accelerator name.
+	AcceleratorType string `json:"acceleratorType,omitempty"`
 }
 
 var _ fi.CompareWithID = &InstanceTemplate{}
@@ -117,9 +130,7 @@ func (e *InstanceTemplate) Find(c *fi.Context) (*InstanceTemplate, error) {
 		for _, tag := range p.Tags.Items {
 			actual.Tags = append(actual.Tags, tag)
 		}
-		for _, tag := range p.GuestAccelerators.Items {
-			actual.GuestAccelerators = append(actual.GuestAccelerators, tag)
-		}
+
 		actual.MachineType = fi.String(lastComponent(p.MachineType))
 		actual.OnHostMaintenance = fi.String(lastComponent(p.OnHostMaintenance))
 		actual.AcceleratorType = fi.String(lastComponent(p.AcceleratorType))
@@ -136,6 +147,14 @@ func (e *InstanceTemplate) Find(c *fi.Context) (*InstanceTemplate, error) {
 
 		if p.Scheduling != nil {
 			actual.Preemptible = &p.Scheduling.Preemptible
+		}
+		if p.GuestAccelerators != nil {
+			ga := p.GuestAccelerators[0]
+			var accelerator []*AcceleratorConfig
+			actual.GuestAccelerators = append(accelerator, &AcceleratorConfig{
+				AcceleratorCount: ga.AcceleratorCount,
+				AcceleratorType:  ga.AcceleratorType,
+			})
 		}
 		if len(p.NetworkInterfaces) != 0 {
 			ni := p.NetworkInterfaces[0]
