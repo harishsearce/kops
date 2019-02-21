@@ -248,6 +248,7 @@ func RunUpdateCluster(f *util.Factory, clusterName string, out io.Writer, c *Upd
 				//fmt.Printf("HA GA21 %v\n", &list.Items[i].Spec.GuestAccelerators[0].AcceleratorType)
 				fmt.Printf("HA GA2122 %v\n", list.Items[i].Spec.GuestAccelerators[0].AcceleratorType)
 				fmt.Printf("HA GA2123 %v\n", list.Items[i].Spec.GuestAccelerators[0].AcceleratorCount)
+				fmt.Printf("HA GA2124 %v\n", list.Items[i].Spec.GuestAccelerators[1].AcceleratorCount)
 				//fmt.Printf("HA GA21 %v\n", *list.Items[i].Spec.GuestAccelerators[0].AcceleratorType)
 				//fmt.Printf("HA GA212 %v\n", fi.String(list.Items[i].Spec.GuestAccelerators[0].AcceleratorType))
 				//fmt.Printf("HA GA21 %v\n", fi.String(&list.Items[i].Spec.GuestAccelerators[0].AcceleratorType))

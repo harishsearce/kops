@@ -149,18 +149,7 @@ func (e *InstanceTemplate) Find(c *fi.Context) (*InstanceTemplate, error) {
 		if p.Scheduling != nil {
 			actual.Preemptible = &p.Scheduling.Preemptible
 		}
-		var accelerator []*AcceleratorConfig
-
-		//if p.GuestAccelerators != nil {
-			//ga := p.GuestAccelerators[0]
-			accelerator = append(accelerator, &AcceleratorConfig{
-				AcceleratorCount: 1,
-				AcceleratorType:  "nvidia-tesla-k802",
-			})
-			//accelerator.AcceleratorCount = 1
-			//accelerator.AcceleratorType = "nvidia-tesla-k80"
-			actual.GuestAccelerators = accelerator
-		//}
+		
 		if len(p.NetworkInterfaces) != 0 {
 			ni := p.NetworkInterfaces[0]
 			actual.Network = &Network{Name: fi.String(lastComponent(ni.Network))}
