@@ -107,7 +107,7 @@ func (e *InstanceTemplate) Find(c *fi.Context) (*InstanceTemplate, error) {
 		actual := &InstanceTemplate{}
 
 		p := r.Properties
-
+		fmt.Printf("From Instance Template GO File%v", p)
 		for _, tag := range p.Tags.Items {
 			actual.Tags = append(actual.Tags, tag)
 		}
