@@ -91,7 +91,7 @@ func (e *InstanceTemplate) Find(c *fi.Context) (*InstanceTemplate, error) {
 		}
 		return nil, fmt.Errorf("error listing InstanceTemplates: %v", err)
 	}
-
+	fmt.Printf("Response From Instance Template GO File%v", response)
 	expected, err := e.mapToGCE(cloud.Project())
 	if err != nil {
 		return nil, err
