@@ -1815,33 +1815,6 @@ func (in *InstanceGroupSpec) DeepCopyInto(out *InstanceGroupSpec) {
 			**out = **in
 		}
 	}
-	if in.OnHostMaintenance != nil {
-		in, out := &in.OnHostMaintenance, &out.OnHostMaintenance
-		if *in == nil {
-			*out = nil
-		} else {
-			*out = new(string)
-			**out = **in
-		}
-	}
-	if in.AcceleratorType != nil {
-		in, out := &in.AcceleratorType, &out.AcceleratorType
-		if *in == nil {
-			*out = nil
-		} else {
-			*out = new(string)
-			**out = **in
-		}
-	}
-	if in.AcceleratorCount != nil {
-		in, out := &in.AcceleratorCount, &out.AcceleratorCount
-		if *in == nil {
-			*out = nil
-		} else {
-			*out = new(int64)
-			**out = **in
-		}
-	}
 	if in.RootVolumeSize != nil {
 		in, out := &in.RootVolumeSize, &out.RootVolumeSize
 		if *in == nil {
@@ -1986,6 +1959,33 @@ func (in *InstanceGroupSpec) DeepCopyInto(out *InstanceGroupSpec) {
 		} else {
 			*out = new(IAMProfileSpec)
 			(*in).DeepCopyInto(*out)
+		}
+	}
+	if in.OnHostMaintenance != nil {
+		in, out := &in.OnHostMaintenance, &out.OnHostMaintenance
+		if *in == nil {
+			*out = nil
+		} else {
+			*out = new(string)
+			**out = **in
+		}
+	}
+	if in.AcceleratorType != nil {
+		in, out := &in.AcceleratorType, &out.AcceleratorType
+		if *in == nil {
+			*out = nil
+		} else {
+			*out = new(string)
+			**out = **in
+		}
+	}
+	if in.AcceleratorCount != nil {
+		in, out := &in.AcceleratorCount, &out.AcceleratorCount
+		if *in == nil {
+			*out = nil
+		} else {
+			*out = new(int64)
+			**out = **in
 		}
 	}
 	if in.SecurityGroupOverride != nil {

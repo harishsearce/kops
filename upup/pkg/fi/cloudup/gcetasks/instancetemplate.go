@@ -375,7 +375,7 @@ func matches(l, r *compute.InstanceTemplate) bool {
 	fmt.Printf("I am called 6\n")
 	normalizeInstanceProperties := func(v *compute.InstanceProperties) *compute.InstanceProperties {
 		c := *v
-	  fmt.Printf("Normalize2:%v", c)
+		fmt.Printf("Normalize2:%v", c)
 		if c.Metadata != nil {
 			cm := *c.Metadata
 			c.Metadata = &cm
@@ -420,10 +420,10 @@ func (e *InstanceTemplate) URL(project string) (string, error) {
 }
 
 func (_ *InstanceTemplate) RenderGCE(t *gce.GCEAPITarget, a, e, changes *InstanceTemplate) error {
-  fmt.Printf("I am called 8\n")
-  fmt.Printf("I am called 8.1%v\n", a)
-  fmt.Printf("I am called 8.2%v\n", e)
-  fmt.Printf("I am called 8.3%v\n", changes)
+	fmt.Printf("I am called 8\n")
+	fmt.Printf("I am called 8.1%v\n", a)
+	fmt.Printf("I am called 8.2%v\n", e)
+	fmt.Printf("I am called 8.3%v\n", changes)
 	project := t.Cloud.Project()
 
 	i, err := e.mapToGCE(project)
