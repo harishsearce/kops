@@ -76,10 +76,12 @@ type InstanceTemplate struct {
 var _ fi.CompareWithID = &InstanceTemplate{}
 
 func (e *InstanceTemplate) CompareWithID() *string {
+	fmt.Printf("I am called 1\n")
 	return e.ID
 }
 
 func (e *InstanceTemplate) Find(c *fi.Context) (*InstanceTemplate, error) {
+	fmt.Printf("I am called 2\n")
 	cloud := c.Cloud.(gce.GCECloud)
 
 	response, err := cloud.Compute().InstanceTemplates.List(cloud.Project()).Do()
@@ -188,10 +190,12 @@ func (e *InstanceTemplate) Find(c *fi.Context) (*InstanceTemplate, error) {
 }
 
 func (e *InstanceTemplate) Run(c *fi.Context) error {
+	fmt.Printf("I am called 3\n")
 	return fi.DefaultDeltaRunMethod(e, c)
 }
 
 func (_ *InstanceTemplate) CheckChanges(a, e, changes *InstanceTemplate) error {
+	fmt.Printf("I am called 4\n")
 	if fi.StringValue(e.BootDiskImage) == "" {
 		return fi.RequiredField("BootDiskImage")
 	}
@@ -202,6 +206,7 @@ func (_ *InstanceTemplate) CheckChanges(a, e, changes *InstanceTemplate) error {
 }
 
 func (e *InstanceTemplate) mapToGCE(project string) (*compute.InstanceTemplate, error) {
+	fmt.Printf("I am called 5\n")
 	// TODO: This is similar to Instance...
 	var scheduling *compute.Scheduling
 	var on_host_maintenance = "MIGRATE"
@@ -210,7 +215,6 @@ func (e *InstanceTemplate) mapToGCE(project string) (*compute.InstanceTemplate, 
 		on_host_maintenance = on_host_maintenance_val
 	}
 	fmt.Printf("E %v", e)
-	fmt.Printf("Compute %v", compute)
 	if fi.BoolValue(e.Preemptible) {
 		scheduling = &compute.Scheduling{
 			AutomaticRestart:  fi.Bool(false),
@@ -368,6 +372,8 @@ func (a ByKey) Swap(i, j int)      { a[i], a[j] = a[j], a[i] }
 func (a ByKey) Less(i, j int) bool { return a[i].Key < a[j].Key }
 
 func matches(l, r *compute.InstanceTemplate) bool {
+	fmt.Printf("I am called 6\n")
+  fmt.Printf("Normalize2:%v", c)
 	normalizeInstanceProperties := func(v *compute.InstanceProperties) *compute.InstanceProperties {
 		c := *v
 		if c.Metadata != nil {
@@ -379,7 +385,9 @@ func matches(l, r *compute.InstanceTemplate) bool {
 		return &c
 	}
 	normalize := func(v *compute.InstanceTemplate) *compute.InstanceTemplate {
+
 		c := *v
+		fmt.Printf("Normalize1:%v", c)
 		c.SelfLink = ""
 		c.CreationTimestamp = ""
 		c.Id = 0
@@ -404,6 +412,7 @@ func matches(l, r *compute.InstanceTemplate) bool {
 }
 
 func (e *InstanceTemplate) URL(project string) (string, error) {
+	fmt.Printf("I am called 7\n")
 	if e.ID == nil {
 		return "", fmt.Errorf("InstanceTemplate not yet built; ID is not yet known")
 	}
@@ -411,6 +420,10 @@ func (e *InstanceTemplate) URL(project string) (string, error) {
 }
 
 func (_ *InstanceTemplate) RenderGCE(t *gce.GCEAPITarget, a, e, changes *InstanceTemplate) error {
+  fmt.Printf("I am called 8\n")
+  fmt.Printf("I am called 8.1%v\n", a)
+  fmt.Printf("I am called 8.2%v\n", e)
+  fmt.Printf("I am called 8.3%v\n", changes)
 	project := t.Cloud.Project()
 
 	i, err := e.mapToGCE(project)
