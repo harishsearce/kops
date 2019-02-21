@@ -97,6 +97,8 @@ func (c *instanceGroups) Watch(opts v1.ListOptions) (watch.Interface, error) {
 
 // Create takes the representation of a instanceGroup and creates it.  Returns the server's representation of the instanceGroup, and an error, if there is any.
 func (c *instanceGroups) Create(instanceGroup *kops.InstanceGroup) (result *kops.InstanceGroup, err error) {
+	fmt.Printf("Internal 1 %v\n", c)
+	fmt.Printf("Internal 1.1 %v\n", instanceGroup)
 	result = &kops.InstanceGroup{}
 	err = c.client.Post().
 		Namespace(c.ns).
@@ -104,6 +106,8 @@ func (c *instanceGroups) Create(instanceGroup *kops.InstanceGroup) (result *kops
 		Body(instanceGroup).
 		Do().
 		Into(result)
+	fmt.Printf("Internal 1.2 %v\n", err)
+	fmt.Printf("Internal 1.3 %v\n", result)
 	return
 }
 

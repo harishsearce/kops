@@ -97,6 +97,8 @@ func (c *instanceGroups) Watch(opts v1.ListOptions) (watch.Interface, error) {
 
 // Create takes the representation of a instanceGroup and creates it.  Returns the server's representation of the instanceGroup, and an error, if there is any.
 func (c *instanceGroups) Create(instanceGroup *v1alpha2.InstanceGroup) (result *v1alpha2.InstanceGroup, err error) {
+	fmt.Printf("Alpha 2 %v\n", c)
+	fmt.Printf("Alpha 2.1 %v\n", instanceGroup)
 	result = &v1alpha2.InstanceGroup{}
 	err = c.client.Post().
 		Namespace(c.ns).
@@ -104,6 +106,8 @@ func (c *instanceGroups) Create(instanceGroup *v1alpha2.InstanceGroup) (result *
 		Body(instanceGroup).
 		Do().
 		Into(result)
+	fmt.Printf("Alpha 2.2 %v\n", err)
+	fmt.Printf("Alpha 2.3 %v\n", result)
 	return
 }
 
