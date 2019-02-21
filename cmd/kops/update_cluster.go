@@ -238,13 +238,13 @@ func RunUpdateCluster(f *util.Factory, clusterName string, out io.Writer, c *Upd
 		for i := range list.Items {
 			fmt.Printf("HA ADDR %v\n", &list.Items[i])
 			fmt.Printf("HA %v\n", list.Items[i])
-			fmt.Printf("HA GA %v\n", fi.String(list.Items[i].Spec.GuestAccelerators.AcceleratorType))
-			fmt.Printf("HA GA1 %v\n", *list.Items[i].Spec.GuestAccelerators.AcceleratorType)
-			fmt.Printf("HA GA2 %v\n", *list.Items[i].Spec.GuestAccelerators.AcceleratorCount)
-			fmt.Printf("HA GA21 %v\n", fi.Int64(list.Items[i].Spec.GuestAccelerators.AcceleratorCount))
+			//fmt.Printf("HA GA %v\n", fi.String(list.Items[i].Spec.GuestAccelerators.AcceleratorType))
+			//fmt.Printf("HA GA1 %v\n", *list.Items[i].Spec.GuestAccelerators.AcceleratorType)
+			//fmt.Printf("HA GA2 %v\n", *list.Items[i].Spec.GuestAccelerators.AcceleratorCount)
+			//fmt.Printf("HA GA21 %v\n", fi.Int64(list.Items[i].Spec.GuestAccelerators.AcceleratorCount))
 			fmt.Printf("HA GA2d %v\n", &list.Items[i].Spec.GuestAccelerators)
-			fmt.Printf("HA GA23d %v\n", &list.Items[i].Spec.GuestAccelerators.AcceleratorType)
-			fmt.Printf("HA GA233d %v\n", &list.Items[i].Spec.GuestAccelerators.AcceleratorCount)
+			//fmt.Printf("HA GA23d %v\n", &list.Items[i].Spec.GuestAccelerators.AcceleratorType)
+			//fmt.Printf("HA GA233d %v\n", &list.Items[i].Spec.GuestAccelerators.AcceleratorCount)
 			instanceGroups = append(instanceGroups, &list.Items[i])
 		}
 	}
