@@ -155,7 +155,7 @@ func (e *InstanceTemplate) Find(c *fi.Context) (*InstanceTemplate, error) {
 			//ga := p.GuestAccelerators[0]
 			accelerator = append(accelerator, &AcceleratorConfig{
 				AcceleratorCount: 1,
-				AcceleratorType:  "nvidia-tesla-k80",
+				AcceleratorType:  "nvidia-tesla-k802",
 			})
 			//accelerator.AcceleratorCount = 1
 			//accelerator.AcceleratorType = "nvidia-tesla-k80"
