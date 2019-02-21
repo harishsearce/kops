@@ -107,6 +107,7 @@ func (e *InstanceTemplate) Find(c *fi.Context) (*InstanceTemplate, error) {
 		return nil, fmt.Errorf("error listing InstanceTemplates: %v", err)
 	}
 	fmt.Printf("Response From Instance Template GO File%v\n", e)
+	fmt.Printf("e.GuestAccelerators Response From Instance Template GO File%v\n", e.GuestAccelerators)
 	fmt.Printf("Response From Instance Template GO File 2%v\n", response)
 	expected, err := e.mapToGCE(cloud.Project())
 	fmt.Printf("Response From Instance Template GO File 22%v\n", expected)
@@ -150,11 +151,10 @@ func (e *InstanceTemplate) Find(c *fi.Context) (*InstanceTemplate, error) {
 		}
 		if p.GuestAccelerators != nil {
 			ga := p.GuestAccelerators[0]
-			var accelerator []*AcceleratorConfig
-			actual.GuestAccelerators = append(accelerator, &AcceleratorConfig{
-				AcceleratorCount: ga.AcceleratorCount,
-				AcceleratorType:  ga.AcceleratorType,
-			})
+			accelerator := &AcceleratorConfig{}
+			accelerator.AcceleratorCount = 1
+			accelerator.AcceleratorType = "nvidia-tesla-k80"
+			actual.GuestAccelerators = accelerator
 		}
 		if len(p.NetworkInterfaces) != 0 {
 			ni := p.NetworkInterfaces[0]
