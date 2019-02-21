@@ -63,7 +63,7 @@ type InstanceTemplate struct {
 
 	Metadata    map[string]*fi.ResourceHolder
 	MachineType *string
-	
+
 	OnHostMaintenance *string
 
 	AcceleratorType  *string
@@ -206,7 +206,7 @@ func (e *InstanceTemplate) mapToGCE(project string) (*compute.InstanceTemplate, 
 	var scheduling *compute.Scheduling
 	var on_host_maintenance = "MIGRATE"
 	on_host_maintenance_val, ohm_check := os.LookupEnv("ON_HOST_MAINTENANCE")
-	if (ohm_check) {
+	if ohm_check {
 		on_host_maintenance = on_host_maintenance_val
 	}
 	fmt.Printf("%v", e)
@@ -302,7 +302,7 @@ func (e *InstanceTemplate) mapToGCE(project string) (*compute.InstanceTemplate, 
 		if err == nil {
 			accelerator = append(accelerator, &compute.AcceleratorConfig{
 				AcceleratorCount: acv,
-				AcceleratorType: accelerator_type,
+				AcceleratorType:  accelerator_type,
 			})
 		}
 
