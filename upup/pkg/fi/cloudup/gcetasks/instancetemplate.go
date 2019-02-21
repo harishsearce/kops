@@ -373,9 +373,9 @@ func (a ByKey) Less(i, j int) bool { return a[i].Key < a[j].Key }
 
 func matches(l, r *compute.InstanceTemplate) bool {
 	fmt.Printf("I am called 6\n")
-  fmt.Printf("Normalize2:%v", c)
 	normalizeInstanceProperties := func(v *compute.InstanceProperties) *compute.InstanceProperties {
 		c := *v
+	  fmt.Printf("Normalize2:%v", c)
 		if c.Metadata != nil {
 			cm := *c.Metadata
 			c.Metadata = &cm
