@@ -97,8 +97,6 @@ func (c *instanceGroups) Watch(opts v1.ListOptions) (watch.Interface, error) {
 
 // Create takes the representation of a instanceGroup and creates it.  Returns the server's representation of the instanceGroup, and an error, if there is any.
 func (c *instanceGroups) Create(instanceGroup *kops.InstanceGroup) (result *kops.InstanceGroup, err error) {
-	fmt.Printf("Harish2 Create Func 1%v", c)
-	fmt.Printf("Harish3 Create Func 2%v", instanceGroup)
 	result = &kops.InstanceGroup{}
 	err = c.client.Post().
 		Namespace(c.ns).
