@@ -239,7 +239,7 @@ func RunUpdateCluster(f *util.Factory, clusterName string, out io.Writer, c *Upd
 			fmt.Printf("HA ADDR %v\n", &list.Items[i])
 			fmt.Printf("HA %v\n", list.Items[i])
 			fmt.Printf("HA GA %v\n", &list.Items[i].Spec.GuestAccelerators)
-			fmt.Printf("HA GA2 %v\n", *list.Items[i].Spec.GuestAccelerators)
+			//fmt.Printf("HA GA2 %v\n", *list.Items[i].Spec.GuestAccelerators)
 			instanceGroups = append(instanceGroups, &list.Items[i])
 		}
 	}
