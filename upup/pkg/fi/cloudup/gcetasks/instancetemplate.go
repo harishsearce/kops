@@ -64,6 +64,8 @@ type InstanceTemplate struct {
 	Metadata    map[string]*fi.ResourceHolder
 	MachineType *string
 
+	GuestAccelerators []string
+
 	OnHostMaintenance *string
 
 	AcceleratorType  *string
