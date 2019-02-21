@@ -117,12 +117,14 @@ func (e *InstanceTemplate) Find(c *fi.Context) (*InstanceTemplate, error) {
 		for _, tag := range p.Tags.Items {
 			actual.Tags = append(actual.Tags, tag)
 		}
+		for _, tag := range p.GuestAccelerators.Items {
+			actual.GuestAccelerators = append(actual.GuestAccelerators, tag)
+		}
 		actual.MachineType = fi.String(lastComponent(p.MachineType))
 		actual.OnHostMaintenance = fi.String(lastComponent(p.OnHostMaintenance))
 		actual.AcceleratorType = fi.String(lastComponent(p.AcceleratorType))
 		actual.AcceleratorCount = &p.AcceleratorCount
 		actual.CanIPForward = &p.CanIpForward
-		actual.GuestAccelerators = &p.GuestAccelerators
 
 		bootDiskImage, err := ShortenImageURL(cloud.Project(), p.Disks[0].InitializeParams.SourceImage)
 		if err != nil {

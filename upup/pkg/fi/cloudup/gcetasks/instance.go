@@ -79,7 +79,6 @@ func (e *Instance) Find(c *fi.Context) (*Instance, error) {
 	actual.Zone = fi.String(lastComponent(r.Zone))
 	actual.MachineType = fi.String(lastComponent(r.MachineType))
 	actual.CanIPForward = &r.CanIpForward
-	actual.GuestAccelerators = &p.GuestAccelerators
 
 	if r.Scheduling != nil {
 		actual.Preemptible = &r.Scheduling.Preemptible
