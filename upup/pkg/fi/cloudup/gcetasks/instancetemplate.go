@@ -96,6 +96,7 @@ func (e *InstanceTemplate) Find(c *fi.Context) (*InstanceTemplate, error) {
 	fmt.Printf("Response From Instance Template GO File%v\n", e)
 	fmt.Printf("Response From Instance Template GO File 2%v\n", response)
 	expected, err := e.mapToGCE(cloud.Project())
+	fmt.Printf("Response From Instance Template GO File 22%v\n", expected)
 	if err != nil {
 		return nil, err
 	}
@@ -104,11 +105,11 @@ func (e *InstanceTemplate) Find(c *fi.Context) (*InstanceTemplate, error) {
 		if !strings.HasPrefix(r.Name, fi.StringValue(e.NamePrefix)+"-") {
 			continue
 		}
-
+		fmt.Printf("Response From Instance Template GO File 3%v\n\n\n", r)
 		if !matches(expected, r) {
 			continue
 		}
-		fmt.Printf("Response From Instance Template GO File 3%v\n\n\n", r)
+
 		actual := &InstanceTemplate{}
 
 		p := r.Properties
