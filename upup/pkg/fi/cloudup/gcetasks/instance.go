@@ -186,6 +186,7 @@ func scopeToShortForm(s string) string {
 }
 
 func (e *Instance) mapToGCE(project string, ipAddressResolver func(*Address) (*string, error)) (*compute.Instance, error) {
+  fmt.Printf("Just to check I am called or not\n")
 	zone := *e.Zone
 
 	var scheduling *compute.Scheduling
