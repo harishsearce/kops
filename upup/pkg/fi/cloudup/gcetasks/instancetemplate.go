@@ -149,9 +149,14 @@ func (e *InstanceTemplate) Find(c *fi.Context) (*InstanceTemplate, error) {
 		if p.Scheduling != nil {
 			actual.Preemptible = &p.Scheduling.Preemptible
 		}
+		var accelerator []*compute.AcceleratorConfig
+
 		if p.GuestAccelerators != nil {
-			ga := p.GuestAccelerators[0]
-			accelerator := &AcceleratorConfig{AcceleratorCount: 1, AcceleratorType: "nvidia-tesla-k80"}
+			//ga := p.GuestAccelerators[0]
+			accelerator = append(accelerator, &compute.AcceleratorConfig{
+				AcceleratorCount: 1,
+				AcceleratorType:  "nvidia-tesla-k80",
+			})
 			//accelerator.AcceleratorCount = 1
 			//accelerator.AcceleratorType = "nvidia-tesla-k80"
 			actual.GuestAccelerators = accelerator
