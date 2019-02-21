@@ -64,10 +64,10 @@ type InstanceTemplate struct {
 	Metadata    map[string]*fi.ResourceHolder
 	MachineType *string
 
-	OnHostMaintenance *string
+	OnHostMaintenance string
 
-	AcceleratorType  *string
-	AcceleratorCount *int64
+	AcceleratorType  string
+	AcceleratorCount int64
 
 	// ID is the actual name
 	ID *string
