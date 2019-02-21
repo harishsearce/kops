@@ -1817,18 +1817,30 @@ func (in *InstanceGroupSpec) DeepCopyInto(out *InstanceGroupSpec) {
 	}
 	if in.OnHostMaintenance != nil {
 		in, out := &in.OnHostMaintenance, &out.OnHostMaintenance
-		*out = make(string, len(*in))
-		copy(*out, *in)
+		if *in == nil {
+			*out = nil
+		} else {
+			*out = new(string)
+			**out = **in
+		}
 	}
 	if in.AcceleratorType != nil {
 		in, out := &in.AcceleratorType, &out.AcceleratorType
-		*out = make(string, len(*in))
-		copy(*out, *in)
+		if *in == nil {
+			*out = nil
+		} else {
+			*out = new(string)
+			**out = **in
+		}
 	}
 	if in.AcceleratorCount != nil {
 		in, out := &in.AcceleratorCount, &out.AcceleratorCount
-		*out = make(int64, len(*in))
-		copy(*out, *in)
+		if *in == nil {
+			*out = nil
+		} else {
+			*out = new(int64)
+			**out = **in
+		}
 	}
 	if in.RootVolumeSize != nil {
 		in, out := &in.RootVolumeSize, &out.RootVolumeSize
