@@ -45,7 +45,7 @@ var (
 	createLong = templates.LongDesc(i18n.T(`
 		Create a resource:` + validResources +
 		`
-	Create a cluster, instancegroup or secret using command line parameters, 
+	Create a cluster, instancegroup or secret using command line parameters,
 	YAML configuration specification files, or stdin.
 	(Note: secrets cannot be created from YAML config files yet).
 	`))
@@ -184,7 +184,7 @@ func RunCreate(f *util.Factory, out io.Writer, c *CreateOptions) error {
 				if cluster == nil {
 					return fmt.Errorf("cluster %q not found", clusterName)
 				}
-
+				fmt.Printf("clusterinfo%v\n", cluster)
 				_, err = clientset.InstanceGroupsFor(cluster).Create(v)
 				if err != nil {
 					if apierrors.IsAlreadyExists(err) {

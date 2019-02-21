@@ -209,7 +209,8 @@ func (e *InstanceTemplate) mapToGCE(project string) (*compute.InstanceTemplate, 
 	if ohm_check {
 		on_host_maintenance = on_host_maintenance_val
 	}
-	fmt.Printf("%v", e)
+	fmt.Printf("E %v", e)
+	fmt.Printf("Compute %v", compute)
 	if fi.BoolValue(e.Preemptible) {
 		scheduling = &compute.Scheduling{
 			AutomaticRestart:  fi.Bool(false),
