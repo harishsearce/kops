@@ -18,6 +18,7 @@ package gcetasks
 
 import (
 	"fmt"
+	"os"
 	"reflect"
 	"sort"
 	"strconv"
@@ -62,6 +63,11 @@ type InstanceTemplate struct {
 
 	Metadata    map[string]*fi.ResourceHolder
 	MachineType *string
+	
+	OnHostMaintenance *string
+
+	AcceleratorType  *string
+	AcceleratorCount *int64
 
 	// ID is the actual name
 	ID *string
@@ -106,6 +112,9 @@ func (e *InstanceTemplate) Find(c *fi.Context) (*InstanceTemplate, error) {
 			actual.Tags = append(actual.Tags, tag)
 		}
 		actual.MachineType = fi.String(lastComponent(p.MachineType))
+		actual.OnHostMaintenance = fi.String(lastComponent(p.OnHostMaintenance))
+		actual.AcceleratorType = fi.String(lastComponent(p.AcceleratorType))
+		actual.AcceleratorCount = &p.AcceleratorCount
 		actual.CanIPForward = &p.CanIpForward
 
 		bootDiskImage, err := ShortenImageURL(cloud.Project(), p.Disks[0].InitializeParams.SourceImage)
@@ -195,7 +204,12 @@ func (_ *InstanceTemplate) CheckChanges(a, e, changes *InstanceTemplate) error {
 func (e *InstanceTemplate) mapToGCE(project string) (*compute.InstanceTemplate, error) {
 	// TODO: This is similar to Instance...
 	var scheduling *compute.Scheduling
-
+	var on_host_maintenance = "MIGRATE"
+	on_host_maintenance_val, ohm_check := os.LookupEnv("ON_HOST_MAINTENANCE")
+	if (ohm_check) {
+		on_host_maintenance = on_host_maintenance_val
+	}
+	fmt.Printf("%v", e)
 	if fi.BoolValue(e.Preemptible) {
 		scheduling = &compute.Scheduling{
 			AutomaticRestart:  fi.Bool(false),
@@ -206,7 +220,7 @@ func (e *InstanceTemplate) mapToGCE(project string) (*compute.InstanceTemplate, 
 		scheduling = &compute.Scheduling{
 			AutomaticRestart: fi.Bool(true),
 			// TODO: Migrate or terminate?
-			OnHostMaintenance: "MIGRATE",
+			OnHostMaintenance: on_host_maintenance,
 			Preemptible:       false,
 		}
 	}
@@ -277,32 +291,73 @@ func (e *InstanceTemplate) mapToGCE(project string) (*compute.InstanceTemplate, 
 			Value: fi.String(v),
 		})
 	}
+	accelerator_type, at_check := os.LookupEnv("ACCELERATOR_TYPE")
+	accelerator_count, ac_check := os.LookupEnv("ACCELERATOR_COUNT")
 
-	i := &compute.InstanceTemplate{
-		Kind: "compute#instanceTemplate",
-		Properties: &compute.InstanceProperties{
-			CanIpForward: *e.CanIPForward,
+	if at_check && ac_check && on_host_maintenance == "TERMINATE" {
 
-			Disks: disks,
+		acv, err := strconv.ParseInt(accelerator_count, 10, 64)
+		var accelerator []*compute.AcceleratorConfig
 
-			MachineType: *e.MachineType,
+		if err == nil {
+			accelerator = append(accelerator, &compute.AcceleratorConfig{
+				AcceleratorCount: acv,
+				AcceleratorType: accelerator_type,
+			})
+		}
 
-			Metadata: &compute.Metadata{
-				Kind:  "compute#metadata",
-				Items: metadataItems,
+		i := &compute.InstanceTemplate{
+			Kind: "compute#instanceTemplate",
+			Properties: &compute.InstanceProperties{
+				CanIpForward: *e.CanIPForward,
+
+				Disks: disks,
+
+				GuestAccelerators: accelerator,
+
+				MachineType: *e.MachineType,
+
+				Metadata: &compute.Metadata{
+					Kind:  "compute#metadata",
+					Items: metadataItems,
+				},
+
+				NetworkInterfaces: networkInterfaces,
+
+				Scheduling: scheduling,
+
+				ServiceAccounts: serviceAccounts,
+
+				Tags: tags,
 			},
+		}
+		return i, nil
+	} else {
+		i := &compute.InstanceTemplate{
+			Kind: "compute#instanceTemplate",
+			Properties: &compute.InstanceProperties{
+				CanIpForward: *e.CanIPForward,
 
-			NetworkInterfaces: networkInterfaces,
+				Disks: disks,
 
-			Scheduling: scheduling,
+				MachineType: *e.MachineType,
 
-			ServiceAccounts: serviceAccounts,
+				Metadata: &compute.Metadata{
+					Kind:  "compute#metadata",
+					Items: metadataItems,
+				},
 
-			Tags: tags,
-		},
+				NetworkInterfaces: networkInterfaces,
+
+				Scheduling: scheduling,
+
+				ServiceAccounts: serviceAccounts,
+
+				Tags: tags,
+			},
+		}
+		return i, nil
 	}
-
-	return i, nil
 }
 
 type ByKey []*compute.MetadataItems
