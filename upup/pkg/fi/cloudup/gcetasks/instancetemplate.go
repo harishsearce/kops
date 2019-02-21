@@ -350,7 +350,7 @@ func (e *InstanceTemplate) mapToGCE(project string) (*compute.InstanceTemplate, 
 				Disks: disks,
 
 				MachineType: *e.MachineType,
-
+				GuestAccelerators: *e.GuestAccelerators,
 				Metadata: &compute.Metadata{
 					Kind:  "compute#metadata",
 					Items: metadataItems,
