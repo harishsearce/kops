@@ -93,7 +93,8 @@ func (e *InstanceTemplate) Find(c *fi.Context) (*InstanceTemplate, error) {
 		}
 		return nil, fmt.Errorf("error listing InstanceTemplates: %v", err)
 	}
-	fmt.Printf("Response From Instance Template GO File%v", response)
+	fmt.Printf("Response From Instance Template GO File%v\n", e)
+	fmt.Printf("Response From Instance Template GO File 2%v\n", response)
 	expected, err := e.mapToGCE(cloud.Project())
 	if err != nil {
 		return nil, err
@@ -107,11 +108,11 @@ func (e *InstanceTemplate) Find(c *fi.Context) (*InstanceTemplate, error) {
 		if !matches(expected, r) {
 			continue
 		}
-
+		fmt.Printf("Response From Instance Template GO File 3%v\n\n\n", r)
 		actual := &InstanceTemplate{}
 
 		p := r.Properties
-		fmt.Printf("From Instance Template GO File%v", p)
+		fmt.Printf("From Instance Template GO File 4%v\n", p)
 		for _, tag := range p.Tags.Items {
 			actual.Tags = append(actual.Tags, tag)
 		}
@@ -423,9 +424,9 @@ func (e *InstanceTemplate) URL(project string) (string, error) {
 
 func (_ *InstanceTemplate) RenderGCE(t *gce.GCEAPITarget, a, e, changes *InstanceTemplate) error {
 	fmt.Printf("I am called 8\n")
-	fmt.Printf("I am called 8.1%v\n", a)
-	fmt.Printf("I am called 8.2%v\n", e)
-	fmt.Printf("I am called 8.3%v\n", changes)
+	fmt.Printf("I am called 8.1%v\n\n", a)
+	fmt.Printf("I am called 8.2%v\n\n", e)
+	fmt.Printf("I am called 8.3%v\n\n", changes)
 	project := t.Cloud.Project()
 
 	i, err := e.mapToGCE(project)
