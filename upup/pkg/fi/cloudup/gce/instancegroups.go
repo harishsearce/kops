@@ -166,7 +166,7 @@ func getCloudGroups(c GCECloud, cluster *kops.Cluster, instancegroups []*kops.In
 				groups[mig.Name] = g
 
 				latestInstanceTemplate := mig.InstanceTemplate
-				fmt.Printf("instancegroup latestInstanceTemplate I am called 11%v\n", t)
+				fmt.Printf("instancegroup latestInstanceTemplate I am called 11%v\n", latestInstanceTemplate)
 				instances, err := ListManagedInstances(c, mig)
 				if err != nil {
 					return err
