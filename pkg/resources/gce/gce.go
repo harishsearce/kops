@@ -134,6 +134,7 @@ type clusterDiscoveryGCE struct {
 }
 
 func (d *clusterDiscoveryGCE) findInstanceTemplates() ([]*compute.InstanceTemplate, error) {
+	fmt.Printf("gce findInstanceTemplates I am called 4%v\n", d)
 	if d.instanceTemplates != nil {
 		return d.instanceTemplates, nil
 	}
@@ -144,6 +145,7 @@ func (d *clusterDiscoveryGCE) findInstanceTemplates() ([]*compute.InstanceTempla
 	}
 
 	d.instanceTemplates = instanceTemplates
+	fmt.Printf("gce findInstanceTemplates I am called 5%v\n", d)
 	return d.instanceTemplates, nil
 }
 
@@ -154,6 +156,7 @@ func (d *clusterDiscoveryGCE) listGCEInstanceTemplates() ([]*resources.Resource,
 	if err != nil {
 		return nil, err
 	}
+	fmt.Printf("gce listGCEInstanceTemplates I am called 7%v\n", templates)
 	for _, t := range templates {
 		selfLink := t.SelfLink // avoid closure-in-loop go-tcha
 		resourceTracker := &resources.Resource{
@@ -165,7 +168,7 @@ func (d *clusterDiscoveryGCE) listGCEInstanceTemplates() ([]*resources.Resource,
 			},
 			Obj: t,
 		}
-
+		fmt.Printf("gce listGCEInstanceTemplates I am called 8%v\n", t)
 		glog.V(4).Infof("Found resource: %s", t.SelfLink)
 		resourceTrackers = append(resourceTrackers, resourceTracker)
 	}
@@ -174,6 +177,8 @@ func (d *clusterDiscoveryGCE) listGCEInstanceTemplates() ([]*resources.Resource,
 }
 
 func (d *clusterDiscoveryGCE) listInstanceGroupManagersAndInstances() ([]*resources.Resource, error) {
+  fmt.Printf("Cluster Discovery I am called 1%v\n", d)
+
 	c := d.gceCloud
 	project := c.Project()
 
@@ -181,7 +186,8 @@ func (d *clusterDiscoveryGCE) listInstanceGroupManagersAndInstances() ([]*resour
 
 	instanceTemplates := make(map[string]*compute.InstanceTemplate)
 	{
-		templates, err := d.findInstanceTemplates()
+		templates, err := d.listInstanceGroupManagersAndInstances()
+		fmt.Printf("gce findInstanceTemplates I am called 6%v\n", templates)
 		if err != nil {
 			return nil, err
 		}
@@ -197,6 +203,7 @@ func (d *clusterDiscoveryGCE) listInstanceGroupManagersAndInstances() ([]*resour
 			for i := range page.Items {
 				mig := page.Items[i] // avoid closure-in-loop go-tcha
 				instanceTemplate := instanceTemplates[mig.InstanceTemplate]
+				fmt.Printf("Cluster Discovery instanceTemplate I am called 2%v\n", instanceTemplate)
 				if instanceTemplate == nil {
 					glog.V(2).Infof("Ignoring MIG with unmanaged InstanceTemplate: %s", mig.InstanceTemplate)
 					continue

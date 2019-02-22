@@ -55,13 +55,15 @@ func (e *InstanceGroupManager) Find(c *fi.Context) (*InstanceGroupManager, error
 		}
 		return nil, fmt.Errorf("error listing InstanceGroupManagers: %v", err)
 	}
+	fmt.Printf("InstanceGroupManager Find I am called 1%v\n", r)
 	actual := &InstanceGroupManager{}
 	actual.Name = &r.Name
 	actual.Zone = fi.String(lastComponent(r.Zone))
 	actual.BaseInstanceName = &r.BaseInstanceName
 	actual.TargetSize = &r.TargetSize
 	actual.InstanceTemplate = &InstanceTemplate{ID: fi.String(lastComponent(r.InstanceTemplate))}
-
+	fmt.Printf("InstanceGroupManager Find I am called 1%v\n", r.InstanceTemplate)
+	fmt.Printf("InstanceGroupManager Find I am called 2%v\n", actual.InstanceTemplate)
 	for _, targetPool := range r.TargetPools {
 		actual.TargetPools = append(actual.TargetPools, &TargetPool{
 			Name: fi.String(lastComponent(targetPool)),
@@ -137,7 +139,9 @@ func (_ *InstanceGroupManager) RenderGCE(t *gce.GCEAPITarget, a, e, changes *Ins
 			request := &compute.InstanceGroupManagersSetInstanceTemplateRequest{
 				InstanceTemplate: instanceTemplateURL,
 			}
+			fmt.Printf("InstanceGroupManager RenderGCE request I am called 322%v\n", request)
 			op, err := t.Cloud.Compute().InstanceGroupManagers.SetInstanceTemplate(t.Cloud.Project(), *e.Zone, i.Name, request).Do()
+			fmt.Printf("InstanceGroupManager RenderGCE I am called 32%v\n", op)
 			if err != nil {
 				return fmt.Errorf("error updating InstanceTemplate for InstanceGroupManager: %v", err)
 			}

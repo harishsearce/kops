@@ -120,8 +120,9 @@ func getCloudGroups(c GCECloud, cluster *kops.Cluster, instancegroups []*kops.In
 		if err != nil {
 			return nil, err
 		}
-
+		fmt.Printf("instancegroup getCloudGroups I am called 9%v\n", templates)
 		for _, t := range templates {
+			fmt.Printf("instancegroup getCloudGroups I am called 1%v\n", t)
 			instanceTemplates[t.SelfLink] = t
 		}
 	}
@@ -137,12 +138,14 @@ func getCloudGroups(c GCECloud, cluster *kops.Cluster, instancegroups []*kops.In
 				name := mig.Name
 
 				instanceTemplate := instanceTemplates[mig.InstanceTemplate]
+				fmt.Printf("instancegroup instanceTemplate I am called 1%v\n", instanceTemplate)
 				if instanceTemplate == nil {
 					glog.V(2).Infof("ignoring MIG %s with unmanaged InstanceTemplate: %s", name, mig.InstanceTemplate)
 					continue
 				}
 
 				ig, err := matchInstanceGroup(mig, cluster, instancegroups)
+				fmt.Printf("instance group ig I am called 2%v\n", ig)
 				if err != nil {
 					return fmt.Errorf("error getting instance group for MIG %q", name)
 				}
@@ -163,7 +166,7 @@ func getCloudGroups(c GCECloud, cluster *kops.Cluster, instancegroups []*kops.In
 				groups[mig.Name] = g
 
 				latestInstanceTemplate := mig.InstanceTemplate
-
+				fmt.Printf("instancegroup latestInstanceTemplate I am called 11%v\n", t)
 				instances, err := ListManagedInstances(c, mig)
 				if err != nil {
 					return err
@@ -247,6 +250,7 @@ func LimitedLengthName(s string, n int) string {
 // matchInstanceGroup filters a list of instancegroups for recognized cloud groups
 func matchInstanceGroup(mig *compute.InstanceGroupManager, c *kops.Cluster, instancegroups []*kops.InstanceGroup) (*kops.InstanceGroup, error) {
 	migName := LastComponent(mig.Name)
+
 	var matches []*kops.InstanceGroup
 	for _, ig := range instancegroups {
 		name := NameForInstanceGroupManager(c, ig, LastComponent(mig.Zone))
@@ -254,7 +258,7 @@ func matchInstanceGroup(mig *compute.InstanceGroupManager, c *kops.Cluster, inst
 			matches = append(matches, ig)
 		}
 	}
-
+	fmt.Printf("instance group matchInstanceGroup I am called 3%v\n", matches)
 	if len(matches) == 0 {
 		return nil, nil
 	}
