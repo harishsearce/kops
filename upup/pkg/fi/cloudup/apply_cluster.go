@@ -145,7 +145,7 @@ type ApplyClusterCmd struct {
 }
 
 func (c *ApplyClusterCmd) Run() error {
-	fmt.Printf("Flow 1%v", c)
+	fmt.Printf("Cloud Up Apply Cluster Flow 1%v\n", c)
 	if c.InstanceGroups == nil {
 		list, err := c.Clientset.InstanceGroupsFor(c.Cluster).List(metav1.ListOptions{})
 		if err != nil {
@@ -157,7 +157,7 @@ func (c *ApplyClusterCmd) Run() error {
 		}
 		c.InstanceGroups = instanceGroups
 	}
-	fmt.Printf("Flow 2%v", c)
+	fmt.Printf("Cloud Up Apply Cluster Flow 2%v\n", c)
 	if c.Models == nil {
 		c.Models = CloudupModels
 	}
