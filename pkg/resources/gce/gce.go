@@ -187,7 +187,6 @@ func (d *clusterDiscoveryGCE) listInstanceGroupManagersAndInstances() ([]*resour
 	instanceTemplates := make(map[string]*compute.InstanceTemplate)
 	{
 		templates, err := d.listInstanceGroupManagersAndInstances()
-		fmt.Printf("gce findInstanceTemplates I am called 6%v\n", templates)
 		if err != nil {
 			return nil, err
 		}
