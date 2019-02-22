@@ -177,7 +177,7 @@ func (d *clusterDiscoveryGCE) listGCEInstanceTemplates() ([]*resources.Resource,
 }
 
 func (d *clusterDiscoveryGCE) listInstanceGroupManagersAndInstances() ([]*resources.Resource, error) {
-  fmt.Printf("Cluster Discovery I am called 1%v\n", d)
+	fmt.Printf("Cluster Discovery I am called 1%v\n", d)
 
 	c := d.gceCloud
 	project := c.Project()

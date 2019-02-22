@@ -46,7 +46,7 @@ func (e *InstanceGroupManager) CompareWithID() *string {
 }
 
 func (e *InstanceGroupManager) Find(c *fi.Context) (*InstanceGroupManager, error) {
-  cloud := c.Cloud.(gce.GCECloud)
+	cloud := c.Cloud.(gce.GCECloud)
 
 	r, err := cloud.Compute().InstanceGroupManagers.Get(cloud.Project(), *e.Zone, *e.Name).Do()
 	if err != nil {

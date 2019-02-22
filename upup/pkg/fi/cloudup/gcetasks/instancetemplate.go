@@ -149,7 +149,7 @@ func (e *InstanceTemplate) Find(c *fi.Context) (*InstanceTemplate, error) {
 		if p.Scheduling != nil {
 			actual.Preemptible = &p.Scheduling.Preemptible
 		}
-		
+
 		if len(p.NetworkInterfaces) != 0 {
 			ni := p.NetworkInterfaces[0]
 			actual.Network = &Network{Name: fi.String(lastComponent(ni.Network))}
