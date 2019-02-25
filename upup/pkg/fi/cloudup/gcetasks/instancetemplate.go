@@ -227,6 +227,8 @@ func (_ *InstanceTemplate) CheckChanges(a, e, changes *InstanceTemplate) error {
 }
 
 func (e *InstanceTemplate) mapToGCE(project string) (*compute.InstanceTemplate, error) {
+
+	//fmt.Printf("e.GuestAccelerators Response From Instance Template GO File%v\n", e.GuestAccelerators[0])
 	fmt.Printf("I am called 5\n")
 	// TODO: This is similar to Instance...
 	var scheduling *compute.Scheduling
@@ -365,6 +367,8 @@ func (e *InstanceTemplate) mapToGCE(project string) (*compute.InstanceTemplate, 
 				CanIpForward: *e.CanIPForward,
 
 				Disks: disks,
+
+				GuestAccelerators: e.GuestAccelerators,
 
 				MachineType: *e.MachineType,
 				Metadata: &compute.Metadata{
