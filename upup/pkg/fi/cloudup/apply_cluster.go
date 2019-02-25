@@ -356,7 +356,10 @@ func (c *ApplyClusterCmd) Run() error {
 		Cluster:        cluster,
 		InstanceGroups: c.InstanceGroups,
 	}
-
+	fmt.Printf("instancegroups apply cluster I am called 121312321%v\n",  c.InstanceGroups)
+	for _, mig := range  c.InstanceGroups {
+		fmt.Printf("instancegroup apply cluster I am called 11231%v\n", mig)
+	}
 	switch kops.CloudProviderID(cluster.Spec.CloudProvider) {
 	case kops.CloudProviderGCE:
 		{

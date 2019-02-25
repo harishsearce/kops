@@ -64,7 +64,7 @@ type InstanceTemplate struct {
 	Metadata    map[string]*fi.ResourceHolder
 	MachineType *string
 
-	GuestAccelerators []*compute.AcceleratorConfig
+	GuestAccelerators []*AcceleratorConfig
 
 	OnHostMaintenance *string
 
@@ -230,7 +230,7 @@ func (e *InstanceTemplate) mapToGCE(project string) (*compute.InstanceTemplate, 
 
 	//fmt.Printf("e.GuestAccelerators Response From Instance Template GO File%v\n", e.GuestAccelerators[0])
 	fmt.Printf("I am called 5\n")
-	fmt.Printf("I am called mapToGCE 1%v\n\n", e.GuestAccelerators[3])
+	//fmt.Printf("I am called mapToGCE 1%v\n\n", e.GuestAccelerators[3])
 	// TODO: This is similar to Instance...
 	var scheduling *compute.Scheduling
 	var on_host_maintenance = "MIGRATE"
