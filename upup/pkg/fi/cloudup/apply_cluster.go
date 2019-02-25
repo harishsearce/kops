@@ -361,7 +361,6 @@ func (c *ApplyClusterCmd) Run() error {
 		fmt.Printf("instancegroup apply cluster I am called 112311%v\n", mig)
 		fmt.Printf("instancegroup apply cluster I am called 1123112%v\n", mig.Spec.GuestAccelerators
 		if len(mig.Spec.GuestAccelerators) != 0 {
-		{
 			fmt.Printf("instancegroup apply cluster I am called 11231113%v\n", mig.Spec.GuestAccelerators[0].AcceleratorType)
 		}
 	}
