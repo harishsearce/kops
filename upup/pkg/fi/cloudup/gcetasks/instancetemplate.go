@@ -445,6 +445,7 @@ func (e *InstanceTemplate) URL(project string) (string, error) {
 }
 
 func (_ *InstanceTemplate) RenderGCE(t *gce.GCEAPITarget, a, e, changes *InstanceTemplate) error {
+	fmt.Printf("InstanceTemplate I am called 11231113%v\n", e.GuestAccelerators[0].AcceleratorType)
 	fmt.Printf("I am called 8\n")
 	fmt.Printf("I am called 8.1%v\n\n", a)
 	fmt.Printf("I am called 8.2%v\n\n", e)
