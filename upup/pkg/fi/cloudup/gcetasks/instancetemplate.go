@@ -64,7 +64,7 @@ type InstanceTemplate struct {
 	Metadata    map[string]*fi.ResourceHolder
 	MachineType *string
 
-	GuestAccelerators []*AcceleratorConfig
+	GuestAccelerators []*compute.AcceleratorConfig
 
 	OnHostMaintenance *string
 
@@ -136,6 +136,7 @@ func (e *InstanceTemplate) Find(c *fi.Context) (*InstanceTemplate, error) {
 		actual.OnHostMaintenance = fi.String(lastComponent(p.OnHostMaintenance))
 		actual.AcceleratorType = fi.String(lastComponent(p.AcceleratorType))
 		actual.AcceleratorCount = &p.AcceleratorCount
+		actual.GuestAccelerators = p.GuestAccelerators
 		actual.CanIPForward = &p.CanIpForward
 
 		bootDiskImage, err := ShortenImageURL(cloud.Project(), p.Disks[0].InitializeParams.SourceImage)
