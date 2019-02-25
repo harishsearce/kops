@@ -95,6 +95,7 @@ func (c *gceCloudImplementation) GetCloudGroups(cluster *kops.Cluster, instanceg
 }
 
 func getCloudGroups(c GCECloud, cluster *kops.Cluster, instancegroups []*kops.InstanceGroup, warnUnmatched bool, nodes []v1.Node) (map[string]*cloudinstances.CloudInstanceGroup, error) {
+	fmt.Printf("instancegroup getCloudGroups I am called 1%v\n", instancegroups)
 	groups := make(map[string]*cloudinstances.CloudInstanceGroup)
 
 	project := c.Project()

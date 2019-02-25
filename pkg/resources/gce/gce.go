@@ -149,7 +149,7 @@ func (d *clusterDiscoveryGCE) findInstanceTemplates() ([]*compute.InstanceTempla
 
 func (d *clusterDiscoveryGCE) listGCEInstanceTemplates() ([]*resources.Resource, error) {
 	var resourceTrackers []*resources.Resource
-
+	fmt.Printf("resources/gce.go checking if called 1")
 	templates, err := d.findInstanceTemplates()
 	if err != nil {
 		return nil, err
@@ -174,6 +174,7 @@ func (d *clusterDiscoveryGCE) listGCEInstanceTemplates() ([]*resources.Resource,
 }
 
 func (d *clusterDiscoveryGCE) listInstanceGroupManagersAndInstances() ([]*resources.Resource, error) {
+	fmt.Printf("resources/gce.go checking if called 2")
 	c := d.gceCloud
 	project := c.Project()
 
