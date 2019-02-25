@@ -157,7 +157,7 @@ func (c *ApplyClusterCmd) Run() error {
 		}
 		c.InstanceGroups = instanceGroups
 	}
-	fmt.Printf("Cloud Up Apply Cluster Flow 2%v\n", c)
+	fmt.Printf("Cloud Up Apply Cluster Flow 2%v\n", c.InstanceGroups)
 	if c.Models == nil {
 		c.Models = CloudupModels
 	}
@@ -358,7 +358,9 @@ func (c *ApplyClusterCmd) Run() error {
 	}
 	fmt.Printf("instancegroups apply cluster I am called 121312321%v\n",  c.InstanceGroups)
 	for _, mig := range  c.InstanceGroups {
-		fmt.Printf("instancegroup apply cluster I am called 11231%v\n", mig)
+		fmt.Printf("instancegroup apply cluster I am called 112311%v\n", mig)
+		fmt.Printf("instancegroup apply cluster I am called 1123112%v\n", mig.Spec.GuestAccelerators)
+		fmt.Printf("instancegroup apply cluster I am called 11231113%v\n", mig.Spec.GuestAccelerators[0].AcceleratorType)
 	}
 	switch kops.CloudProviderID(cluster.Spec.CloudProvider) {
 	case kops.CloudProviderGCE:
