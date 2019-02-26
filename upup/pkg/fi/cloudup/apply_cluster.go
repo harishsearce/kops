@@ -386,7 +386,7 @@ func (c *ApplyClusterCmd) Run() error {
 				"FirewallRule":         &gcetasks.FirewallRule{},
 				"Address":              &gcetasks.Address{},
 			})
-			fmt.Printf("instancegroup apply cluster I am called InstanceTemplate 1123115%v\n", &gcetasks.InstanceTemplate)
+			fmt.Printf("instancegroup apply cluster I am called InstanceTemplate 1123115%v\n", cluster)
 		}
 
 	case kops.CloudProviderDO:
