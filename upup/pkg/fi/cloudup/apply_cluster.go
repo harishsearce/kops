@@ -357,7 +357,6 @@ func (c *ApplyClusterCmd) Run() error {
 		InstanceGroups: c.InstanceGroups,
 	}
 
-	fmt.Printf("instancegroups gcetasks.InstanceTemplateapply cluster I am called 1%v\n",  c.InstanceTemplate)
 	fmt.Printf("instancegroups apply cluster I am called 121312321%v\n",  c.InstanceGroups)
 	for _, mig := range  c.InstanceGroups {
 		fmt.Printf("instancegroup apply cluster I am called 112311%v\n", mig)
