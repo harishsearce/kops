@@ -386,6 +386,7 @@ func (c *ApplyClusterCmd) Run() error {
 				"FirewallRule":         &gcetasks.FirewallRule{},
 				"Address":              &gcetasks.Address{},
 			})
+			fmt.Printf("instancegroup apply cluster I am called InstanceTemplate 1123115%v\n", l.InstanceTemplate)
 		}
 
 	case kops.CloudProviderDO:
@@ -580,6 +581,9 @@ func (c *ApplyClusterCmd) Run() error {
 
 		case "cloudup":
 			templates, err := templates.LoadTemplates(cluster, models.NewAssetPath("cloudup/resources"))
+			fmt.Printf("cloudup apply cluster I am called 121%v\n",  templates)
+			fmt.Printf("cloudup apply cluster I am called 5121%v\n",  cluster)
+			fmt.Printf("cloudup apply cluster I am called 6121%v\n",  models.NewAssetPath("cloudup/resources"))
 			if err != nil {
 				return fmt.Errorf("error loading templates: %v", err)
 			}
@@ -639,7 +643,7 @@ func (c *ApplyClusterCmd) Run() error {
 				gceModelContext := &gcemodel.GCEModelContext{
 					KopsModelContext: modelContext,
 				}
-
+				fmt.Printf("gceModelContext apply cluster I am called 111%v\n",  gceModelContext)
 				storageAclLifecycle := securityLifecycle
 				if storageAclLifecycle != fi.LifecycleIgnore {
 					// This is a best-effort permissions fix

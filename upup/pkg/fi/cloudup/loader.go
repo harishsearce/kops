@@ -106,8 +106,10 @@ func (l *Loader) AddTypes(types map[string]interface{}) {
 		}
 
 		t := reflect.TypeOf(proto)
+		fmt.Printf("Loader from apply cluster I am called 1 %v\n",  t.Kind())
 		if t.Kind() == reflect.Ptr {
 			t = t.Elem()
+			fmt.Printf("Loader from apply cluster I am called 2 %v\n",  t)
 		}
 		l.typeMap[key] = t
 	}
@@ -181,6 +183,7 @@ func (l *Loader) BuildTasks(modelStore vfs.Path, models []string, assetBuilder *
 			return nil, err
 		}
 		l.tasks = context.Tasks
+		fmt.Printf("loader apply cluster I am called 5121%v\n",  l.tasks)
 	}
 
 	if err := l.addAssetCopyTasks(assetBuilder.ContainerAssets, lifecycle); err != nil {
@@ -351,8 +354,9 @@ func (l *Loader) resourceHandler(i *loader.TreeWalkItem) error {
 	key := i.RelativePath
 	if strings.HasSuffix(key, ".template") {
 		key = strings.TrimSuffix(key, ".template")
+		fmt.Printf("loader apply cluster I am called 777%v\n",  key)
 		glog.V(2).Infof("loading (templated) resource %q", key)
-
+		fmt.Printf("string(contents) apply cluster I am called 777%v\n",  string(contents))
 		a = &templateResource{
 			template: string(contents),
 			loader:   l,
