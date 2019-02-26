@@ -87,12 +87,12 @@ func (_ *InstanceGroupManager) CheckChanges(a, e, changes *InstanceGroupManager)
 
 func (_ *InstanceGroupManager) RenderGCE(t *gce.GCEAPITarget, a, e, changes *InstanceGroupManager) error {
 	project := t.Cloud.Project()
-
+	fmt.Printf("InstanceGroupManager  I am called 551%v\n",  e.InstanceTemplate)
 	instanceTemplateURL, err := e.InstanceTemplate.URL(project)
 	if err != nil {
 		return err
 	}
-
+	fmt.Printf("InstanceGroupManager  I am called 5511%v\n",  instanceTemplateURL)
 	i := &compute.InstanceGroupManager{
 		Name:             *e.Name,
 		Zone:             *e.Zone,
@@ -100,7 +100,7 @@ func (_ *InstanceGroupManager) RenderGCE(t *gce.GCEAPITarget, a, e, changes *Ins
 		TargetSize:       *e.TargetSize,
 		InstanceTemplate: instanceTemplateURL,
 	}
-
+	fmt.Printf("InstanceGroupManager changes.InstanceTemplate I am called 5511%v\n",  changes.InstanceTemplate)
 	for _, targetPool := range e.TargetPools {
 		i.TargetPools = append(i.TargetPools, targetPool.URL(t.Cloud))
 	}
