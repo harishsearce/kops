@@ -97,6 +97,14 @@ func (e *InstanceTemplate) CompareWithID() *string {
 
 func (e *InstanceTemplate) Find(c *fi.Context) (*InstanceTemplate, error) {
 	fmt.Printf("I am called 2\n")
+	fmt.Printf("InstanceTemplate apply cluster I am called 100%v\n",  c.InstanceGroups)
+	for _, mig := range  c.InstanceGroups {
+		fmt.Printf("InstanceTemplate  I am called 101%v\n", mig)
+		fmt.Printf("InstanceTemplate I am called 102%v\n", mig.Spec.GuestAccelerators)
+		if len(mig.Spec.GuestAccelerators) != 0 {
+			fmt.Printf("InstanceTemplate I am called 103%v\n", mig.Spec.GuestAccelerators[0].AcceleratorType)
+		}
+	}
 	cloud := c.Cloud.(gce.GCECloud)
 
 	response, err := cloud.Compute().InstanceTemplates.List(cloud.Project()).Do()
