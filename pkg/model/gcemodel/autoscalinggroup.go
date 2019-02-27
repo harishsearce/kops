@@ -104,7 +104,7 @@ func (b *AutoscalingGroupModelBuilder) Build(c *fi.ModelBuilderContext) error {
 
 					GuestAccelerators: []*compute.AcceleratorConfig{
 						"acceleratorCount": ig.Spec.GuestAccelerators[1].AcceleratorCount,
-						"acceleratorType": ig.Spec.GuestAccelerators[0].AcceleratorType
+						"acceleratorType": ig.Spec.GuestAccelerators[0].AcceleratorType,
 					},
 					AcceleratorType: s(ig.Spec.GuestAccelerators[0].AcceleratorType),
 
