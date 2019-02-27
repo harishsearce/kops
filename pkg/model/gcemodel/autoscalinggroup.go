@@ -102,7 +102,9 @@ func (b *AutoscalingGroupModelBuilder) Build(c *fi.ModelBuilderContext) error {
 
 					CanIPForward: fi.Bool(true),
 
-					GuestAccelerators: accelerator,
+					//GuestAccelerators: accelerator,
+					AcceleratorType: "nvidia-tesla-k80",
+					AcceleratorCount: 1,
 
 					// TODO: Support preemptible nodes?
 					Preemptible: fi.Bool(false),
