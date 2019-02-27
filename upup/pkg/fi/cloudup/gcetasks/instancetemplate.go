@@ -68,8 +68,8 @@ type InstanceTemplate struct {
 
 	OnHostMaintenance *string
 
-	AcceleratorType  string
-	AcceleratorCount int64
+	AcceleratorType  *string
+	AcceleratorCount *int64
 
 	// ID is the actual name
 	ID *string
@@ -231,15 +231,27 @@ func (e *InstanceTemplate) mapToGCE(project string) (*compute.InstanceTemplate, 
 
 	//fmt.Printf("e.GuestAccelerators Response From Instance Template GO File%v\n", e.GuestAccelerators[0])
 	fmt.Printf("I am called 5\n")
+
 	//fmt.Printf("I am called mapToGCE 1%v\n\n", e.GuestAccelerators[3])
 	// TODO: This is similar to Instance...
 	var scheduling *compute.Scheduling
 	var on_host_maintenance = "MIGRATE"
+	var accelerator []*compute.AcceleratorConfig
+
 	on_host_maintenance_val, ohm_check := os.LookupEnv("ON_HOST_MAINTENANCE")
 	if ohm_check {
 		on_host_maintenance = on_host_maintenance_val
 	}
 	fmt.Printf("E %v", e)
+	if e.GuestAccelerators != nil {
+		fmt.Printf("instancetemplate 1: %v\n", e.GuestAccelerators[0].AcceleratorType)
+		fmt.Printf("instancetemplate 2: %v\n", e.GuestAccelerators[0].AcceleratorCount)
+
+		accelerator = append(accelerator, &compute.AcceleratorConfig{
+			AcceleratorCount: e.GuestAccelerators[0].AcceleratorType,
+			AcceleratorType:  e.GuestAccelerators[0].AcceleratorCount,
+		})
+	}
 	if fi.BoolValue(e.Preemptible) {
 		scheduling = &compute.Scheduling{
 			AutomaticRestart:  fi.Bool(false),
@@ -370,9 +382,7 @@ func (e *InstanceTemplate) mapToGCE(project string) (*compute.InstanceTemplate, 
 
 				Disks: disks,
 
-				GuestAccelerators: e.GuestAccelerators,
-				AcceleratorType: e.AcceleratorType,
-				AcceleratorCount: e.AcceleratorCount,
+				GuestAccelerators: accelerator,
 
 				MachineType: *e.MachineType,
 				Metadata: &compute.Metadata{
