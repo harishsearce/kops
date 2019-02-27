@@ -85,8 +85,8 @@ func (b *AutoscalingGroupModelBuilder) Build(c *fi.ModelBuilderContext) error {
 				//if acverr == nil {
 				//AcceleratorCount: fi.Int64(ig.Spec.GuestAccelerators[1].AcceleratorCount),
 				accelerator = append(accelerator, &compute.AcceleratorConfig{
-					AcceleratorCount: i64(int64(ig.Spec.GuestAccelerators[1].AcceleratorCount)),
-					AcceleratorType:  s(ig.Spec.GuestAccelerators[0].AcceleratorType),
+					AcceleratorCount: ig.Spec.GuestAccelerators[1].AcceleratorCount,
+					AcceleratorType:  ig.Spec.GuestAccelerators[0].AcceleratorType,
 				})
 				//}
 				//volumeSize := fi.Int32Value(ig.Spec.RootVolumeSize)
@@ -103,8 +103,8 @@ func (b *AutoscalingGroupModelBuilder) Build(c *fi.ModelBuilderContext) error {
 					CanIPForward: fi.Bool(true),
 
 					GuestAccelerators: []*compute.AcceleratorConfig{
-						"acceleratorCount": ig.Spec.GuestAccelerators[1].AcceleratorCount,
-						"acceleratorType": ig.Spec.GuestAccelerators[0].AcceleratorType,
+						"acceleratorCount": i64(int64(ig.Spec.GuestAccelerators[1].AcceleratorCount)),
+						"acceleratorType": s(ig.Spec.GuestAccelerators[0].AcceleratorType),
 					},
 					AcceleratorType: s(ig.Spec.GuestAccelerators[0].AcceleratorType),
 
