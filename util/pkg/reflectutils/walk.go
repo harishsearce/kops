@@ -125,8 +125,7 @@ func reflectRecursive(path string, v reflect.Value, visitor visitorFunc) error {
 			f := v.Field(i)
 
 			childPath := path + "." + structField.Name
-			if(path == ".GuestAccelerators[0]")
-			{
+			if path == ".GuestAccelerators[0]" {
 				fmt.Printf(".GuestAccelerators[0] 11=  %v\n\n\n", path)
 				fmt.Printf(".GuestAccelerators[0] 222 v 2 =  %v\n\n\n", f)
 				fmt.Printf(".GuestAccelerators[0] 222 childPath 2 =  %v\n\n\n", childPath)
