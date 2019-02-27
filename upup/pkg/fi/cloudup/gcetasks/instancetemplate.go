@@ -18,7 +18,6 @@ package gcetasks
 
 import (
 	"fmt"
-	"os"
 	"reflect"
 	"sort"
 	"strconv"
