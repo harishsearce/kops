@@ -371,8 +371,8 @@ func (e *InstanceTemplate) mapToGCE(project string) (*compute.InstanceTemplate, 
 				Disks: disks,
 
 				GuestAccelerators: e.GuestAccelerators,
-				AcceleratorType: e.AcceleratorType,
-				AcceleratorCount: e.AcceleratorCount,
+				AcceleratorType: *e.AcceleratorType,
+				AcceleratorCount: *e.AcceleratorCount,
 
 				MachineType: *e.MachineType,
 				Metadata: &compute.Metadata{
