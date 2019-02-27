@@ -84,10 +84,10 @@ func (b *AutoscalingGroupModelBuilder) Build(c *fi.ModelBuilderContext) error {
 
 				//if acverr == nil {
 				//AcceleratorCount: fi.Int64(ig.Spec.GuestAccelerators[1].AcceleratorCount),
-				//accelerator = append(accelerator, &compute.AcceleratorConfig{
-				//	AcceleratorCount: ig.Spec.GuestAccelerators[1].AcceleratorCount,
-				//	AcceleratorType:  ig.Spec.GuestAccelerators[0].AcceleratorType,
-				//})
+				accelerator = append(accelerator, &compute.AcceleratorConfig{
+					AcceleratorCount: ig.Spec.GuestAccelerators[1].AcceleratorCount,
+					AcceleratorType:  ig.Spec.GuestAccelerators[0].AcceleratorType,
+				})
 				//}
 
 				t := &gcetasks.InstanceTemplate{
@@ -102,10 +102,7 @@ func (b *AutoscalingGroupModelBuilder) Build(c *fi.ModelBuilderContext) error {
 
 					CanIPForward: fi.Bool(true),
 
-					GuestAccelerators: []*compute.AcceleratorConfig{
-						"acceleratorType": "nvidia-tesla-k80",
-						"acceleratorCount": 1,
-					},
+					GuestAccelerators: accelerator,
 
 					// TODO: Support preemptible nodes?
 					Preemptible: fi.Bool(false),
