@@ -236,13 +236,6 @@ func RunUpdateCluster(f *util.Factory, clusterName string, out io.Writer, c *Upd
 			return nil, err
 		}
 		for i := range list.Items {
-			fmt.Printf("HA ADDR %v\n", &list.Items[i])
-			fmt.Printf("HA %v\n", list.Items[i])
-			if len(list.Items[i].Spec.GuestAccelerators) != 0 {
-
-				fmt.Printf("HA GA2122 %v\n", list.Items[i].Spec.GuestAccelerators[0].AcceleratorType)
-				fmt.Printf("HA GA2124 %v\n", list.Items[i].Spec.GuestAccelerators[0].AcceleratorCount)
-			}
 			instanceGroups = append(instanceGroups, &list.Items[i])
 		}
 	}
