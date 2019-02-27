@@ -106,10 +106,8 @@ func (l *Loader) AddTypes(types map[string]interface{}) {
 		}
 
 		t := reflect.TypeOf(proto)
-		//fmt.Printf("Loader from apply cluster I am called 1 %v\n",  t.Kind())
 		if t.Kind() == reflect.Ptr {
 			t = t.Elem()
-			//fmt.Printf("Loader from apply cluster I am called 2 %v\n",  t)
 		}
 		l.typeMap[key] = t
 	}
@@ -183,7 +181,6 @@ func (l *Loader) BuildTasks(modelStore vfs.Path, models []string, assetBuilder *
 			return nil, err
 		}
 		l.tasks = context.Tasks
-		//fmt.Printf("loader apply cluster I am called 5121%v\n",  l.tasks)
 	}
 
 	if err := l.addAssetCopyTasks(assetBuilder.ContainerAssets, lifecycle); err != nil {
@@ -354,9 +351,7 @@ func (l *Loader) resourceHandler(i *loader.TreeWalkItem) error {
 	key := i.RelativePath
 	if strings.HasSuffix(key, ".template") {
 		key = strings.TrimSuffix(key, ".template")
-		//fmt.Printf("loader apply cluster I am called 777%v\n",  key)
 		glog.V(2).Infof("loading (templated) resource %q", key)
-		//fmt.Printf("string(contents) apply cluster I am called 777%v\n",  string(contents))
 		a = &templateResource{
 			template: string(contents),
 			loader:   l,
@@ -401,8 +396,6 @@ func (l *Loader) objectHandler(i *loader.TreeWalkItem) error {
 
 func (l *Loader) loadYamlObjects(key string, data string) (map[string]interface{}, error) {
 	var o map[string]interface{}
-	//fmt.Printf("loader.go loadYamlObjects%v\n\n", data)
-	//fmt.Printf("loader.go loadYamlObjects end\n\n")
 	if strings.TrimSpace(data) != "" {
 		err := utils.YamlUnmarshal([]byte(data), &o)
 		if err != nil {
@@ -504,7 +497,6 @@ func (l *Loader) populateResource(rh *fi.ResourceHolder, resource fi.Resource, a
 func (l *Loader) renderResource(resourceName string, args []string) (string, error) {
 	resourceKey := strings.TrimSuffix(resourceName, ".template")
 	resourceKey = strings.TrimPrefix(resourceKey, "resources/")
-	fmt.Printf("loader.go renderResource resourceKey%v\n\n", resourceKey)
 	configResource := l.Resources[resourceKey]
 	if configResource == nil {
 		return "", fmt.Errorf("cannot find resource %q", resourceName)
@@ -520,7 +512,5 @@ func (l *Loader) renderResource(resourceName string, args []string) (string, err
 	if err != nil {
 		return "", fmt.Errorf("error reading resource %q: %v", resourceName, err)
 	}
-	fmt.Printf("loader.go renderResource%v\n\n", string(data))
-	fmt.Printf("loader.go renderResource end\n\n")
 	return string(data), nil
 }

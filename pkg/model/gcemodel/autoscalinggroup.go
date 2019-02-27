@@ -64,12 +64,6 @@ func (b *AutoscalingGroupModelBuilder) Build(c *fi.ModelBuilderContext) error {
 		if err != nil {
 			return err
 		}
-		fmt.Printf("gcemodel/autoscalinggroup.go Build%v\n\n", ig)
-		fmt.Printf("gcemodel/autoscalinggroup.go Build end\n\n")
-		fmt.Printf("igcemodel/autoscalinggroup.go Build I am called 9999%v\n", ig.Spec.GuestAccelerators)
-		if len(ig.Spec.GuestAccelerators) != 0 {
-			fmt.Printf("gcemodel/autoscalinggroup.go Build I am called 99999%v\n", ig.Spec.GuestAccelerators[0].AcceleratorType)
-		}
 		// InstanceTemplate
 		var instanceTemplate *gcetasks.InstanceTemplate
 		{
@@ -88,20 +82,12 @@ func (b *AutoscalingGroupModelBuilder) Build(c *fi.ModelBuilderContext) error {
 			namePrefix := gce.LimitedLengthName(name, gcetasks.InstanceTemplateNamePrefixMaxLength)
 
 			if len(ig.Spec.GuestAccelerators) != 0 {
-
 				var accelerator []*compute.AcceleratorConfig
-
-				//acv, acverr := ig.Spec.GuestAccelerators[1].AcceleratorCount
-
-				//if acverr == nil {
-				//AcceleratorCount: fi.Int64(ig.Spec.GuestAccelerators[1].AcceleratorCount),
 				accelerator = append(accelerator, &compute.AcceleratorConfig{
 					AcceleratorCount: ig.Spec.GuestAccelerators[0].AcceleratorCount,
 					AcceleratorType:  ig.Spec.GuestAccelerators[0].AcceleratorType,
 				})
-				fmt.Printf("autoscalingGroup: accelerator: %v\n\n", accelerator)
-				//}
-				//volumeSize := fi.Int32Value(ig.Spec.RootVolumeSize)
+
 				t := &gcetasks.InstanceTemplate{
 					Name:           s(name),
 					NamePrefix:     s(namePrefix),

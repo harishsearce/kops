@@ -239,7 +239,6 @@ func RunUpdateCluster(f *util.Factory, clusterName string, out io.Writer, c *Upd
 			instanceGroups = append(instanceGroups, &list.Items[i])
 		}
 	}
-	fmt.Printf("Update Cluster Go File %v\n", instanceGroups)
 	applyCmd := &cloudup.ApplyClusterCmd{
 		Clientset:          clientset,
 		Cluster:            cluster,

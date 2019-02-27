@@ -171,7 +171,6 @@ func RunCreate(f *util.Factory, out io.Writer, c *CreateOptions) error {
 				//cSpec = true
 
 			case *kopsapi.InstanceGroup:
-				//fmt.Printf("GuestAccelerators%v\n", v.Spec.GuestAccelerators)
 				clusterName = v.ObjectMeta.Labels[kopsapi.LabelClusterName]
 				if clusterName == "" {
 					return fmt.Errorf("must specify %q label with cluster name to create instanceGroup", kopsapi.LabelClusterName)
@@ -184,7 +183,6 @@ func RunCreate(f *util.Factory, out io.Writer, c *CreateOptions) error {
 				if cluster == nil {
 					return fmt.Errorf("cluster %q not found", clusterName)
 				}
-				fmt.Printf("clusterinfo%v\n", cluster)
 				_, err = clientset.InstanceGroupsFor(cluster).Create(v)
 				if err != nil {
 					if apierrors.IsAlreadyExists(err) {

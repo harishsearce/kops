@@ -91,13 +91,10 @@ type AcceleratorConfig struct {
 var _ fi.CompareWithID = &InstanceTemplate{}
 
 func (e *InstanceTemplate) CompareWithID() *string {
-	fmt.Printf("I am called 1\n")
 	return e.ID
 }
 
 func (e *InstanceTemplate) Find(c *fi.Context) (*InstanceTemplate, error) {
-	fmt.Printf("I am called 2\n")
-
 	cloud := c.Cloud.(gce.GCECloud)
 
 	response, err := cloud.Compute().InstanceTemplates.List(cloud.Project()).Do()
@@ -107,11 +104,7 @@ func (e *InstanceTemplate) Find(c *fi.Context) (*InstanceTemplate, error) {
 		}
 		return nil, fmt.Errorf("error listing InstanceTemplates: %v", err)
 	}
-	fmt.Printf("Response From Instance Template GO File%v\n", e)
-	fmt.Printf("e.GuestAccelerators Response From Instance Template GO File%v\n", e.GuestAccelerators)
-	fmt.Printf("Response From Instance Template GO File 2%v\n", response)
 	expected, err := e.mapToGCE(cloud.Project())
-	fmt.Printf("Response From Instance Template GO File 22%v\n", expected)
 	if err != nil {
 		return nil, err
 	}
@@ -120,7 +113,6 @@ func (e *InstanceTemplate) Find(c *fi.Context) (*InstanceTemplate, error) {
 		if !strings.HasPrefix(r.Name, fi.StringValue(e.NamePrefix)+"-") {
 			continue
 		}
-		fmt.Printf("Response From Instance Template GO File 3%v\n\n\n", r)
 		if !matches(expected, r) {
 			continue
 		}
@@ -128,7 +120,6 @@ func (e *InstanceTemplate) Find(c *fi.Context) (*InstanceTemplate, error) {
 		actual := &InstanceTemplate{}
 
 		p := r.Properties
-		fmt.Printf("From Instance Template GO File 4%v\n", p)
 		for _, tag := range p.Tags.Items {
 			actual.Tags = append(actual.Tags, tag)
 		}
@@ -212,12 +203,10 @@ func (e *InstanceTemplate) Find(c *fi.Context) (*InstanceTemplate, error) {
 }
 
 func (e *InstanceTemplate) Run(c *fi.Context) error {
-	fmt.Printf("I am called 3\n")
 	return fi.DefaultDeltaRunMethod(e, c)
 }
 
 func (_ *InstanceTemplate) CheckChanges(a, e, changes *InstanceTemplate) error {
-	fmt.Printf("I am called 4\n")
 	if fi.StringValue(e.BootDiskImage) == "" {
 		return fi.RequiredField("BootDiskImage")
 	}
@@ -228,30 +217,20 @@ func (_ *InstanceTemplate) CheckChanges(a, e, changes *InstanceTemplate) error {
 }
 
 func (e *InstanceTemplate) mapToGCE(project string) (*compute.InstanceTemplate, error) {
-
-	//fmt.Printf("e.GuestAccelerators Response From Instance Template GO File%v\n", e.GuestAccelerators[0])
-	fmt.Printf("I am called 5\n")
-
-	//fmt.Printf("I am called mapToGCE 1%v\n\n", e.GuestAccelerators[3])
 	// TODO: This is similar to Instance...
 	var scheduling *compute.Scheduling
 	var on_host_maintenance = "MIGRATE"
 	var accelerator []*compute.AcceleratorConfig
 
-	on_host_maintenance_val, ohm_check := os.LookupEnv("ON_HOST_MAINTENANCE")
-	if ohm_check {
-		on_host_maintenance = on_host_maintenance_val
-	}
-	fmt.Printf("E %v", e)
+	//Added GuestAccelerators to InstanceTemplate
 	if e.GuestAccelerators != nil {
-		fmt.Printf("instancetemplate 1: %v\n", e.GuestAccelerators[0].AcceleratorType)
-		fmt.Printf("instancetemplate 2: %v\n", e.GuestAccelerators[0].AcceleratorCount)
-
 		accelerator = append(accelerator, &compute.AcceleratorConfig{
 			AcceleratorCount: e.GuestAccelerators[0].AcceleratorCount,
 			AcceleratorType:  e.GuestAccelerators[0].AcceleratorType,
 		})
+		on_host_maintenance = "TERMINATE"
 	}
+
 	if fi.BoolValue(e.Preemptible) {
 		scheduling = &compute.Scheduling{
 			AutomaticRestart:  fi.Bool(false),
@@ -333,74 +312,32 @@ func (e *InstanceTemplate) mapToGCE(project string) (*compute.InstanceTemplate, 
 			Value: fi.String(v),
 		})
 	}
-	accelerator_type, at_check := os.LookupEnv("ACCELERATOR_TYPE")
-	accelerator_count, ac_check := os.LookupEnv("ACCELERATOR_COUNT")
 
-	if at_check && ac_check && on_host_maintenance == "TERMINATE" {
+	i := &compute.InstanceTemplate{
+		Kind: "compute#instanceTemplate",
+		Properties: &compute.InstanceProperties{
+			CanIpForward: *e.CanIPForward,
 
-		acv, err := strconv.ParseInt(accelerator_count, 10, 64)
-		var accelerator []*compute.AcceleratorConfig
+			Disks: disks,
 
-		if err == nil {
-			accelerator = append(accelerator, &compute.AcceleratorConfig{
-				AcceleratorCount: acv,
-				AcceleratorType:  accelerator_type,
-			})
-		}
+			GuestAccelerators: accelerator,
 
-		i := &compute.InstanceTemplate{
-			Kind: "compute#instanceTemplate",
-			Properties: &compute.InstanceProperties{
-				CanIpForward: *e.CanIPForward,
-
-				Disks: disks,
-
-				GuestAccelerators: accelerator,
-
-				MachineType: *e.MachineType,
-
-				Metadata: &compute.Metadata{
-					Kind:  "compute#metadata",
-					Items: metadataItems,
-				},
-
-				NetworkInterfaces: networkInterfaces,
-
-				Scheduling: scheduling,
-
-				ServiceAccounts: serviceAccounts,
-
-				Tags: tags,
+			MachineType: *e.MachineType,
+			Metadata: &compute.Metadata{
+				Kind:  "compute#metadata",
+				Items: metadataItems,
 			},
-		}
-		return i, nil
-	} else {
-		i := &compute.InstanceTemplate{
-			Kind: "compute#instanceTemplate",
-			Properties: &compute.InstanceProperties{
-				CanIpForward: *e.CanIPForward,
 
-				Disks: disks,
+			NetworkInterfaces: networkInterfaces,
 
-				GuestAccelerators: accelerator,
+			Scheduling: scheduling,
 
-				MachineType: *e.MachineType,
-				Metadata: &compute.Metadata{
-					Kind:  "compute#metadata",
-					Items: metadataItems,
-				},
+			ServiceAccounts: serviceAccounts,
 
-				NetworkInterfaces: networkInterfaces,
-
-				Scheduling: scheduling,
-
-				ServiceAccounts: serviceAccounts,
-
-				Tags: tags,
-			},
-		}
-		return i, nil
+			Tags: tags,
+		},
 	}
+	return i, nil
 }
 
 type ByKey []*compute.MetadataItems
@@ -410,10 +347,8 @@ func (a ByKey) Swap(i, j int)      { a[i], a[j] = a[j], a[i] }
 func (a ByKey) Less(i, j int) bool { return a[i].Key < a[j].Key }
 
 func matches(l, r *compute.InstanceTemplate) bool {
-	fmt.Printf("I am called 6\n")
 	normalizeInstanceProperties := func(v *compute.InstanceProperties) *compute.InstanceProperties {
 		c := *v
-		fmt.Printf("Normalize2:%v", c)
 		if c.Metadata != nil {
 			cm := *c.Metadata
 			c.Metadata = &cm
@@ -425,7 +360,6 @@ func matches(l, r *compute.InstanceTemplate) bool {
 	normalize := func(v *compute.InstanceTemplate) *compute.InstanceTemplate {
 
 		c := *v
-		fmt.Printf("Normalize1:%v", c)
 		c.SelfLink = ""
 		c.CreationTimestamp = ""
 		c.Id = 0
@@ -450,7 +384,6 @@ func matches(l, r *compute.InstanceTemplate) bool {
 }
 
 func (e *InstanceTemplate) URL(project string) (string, error) {
-	fmt.Printf("I am called 7\n")
 	if e.ID == nil {
 		return "", fmt.Errorf("InstanceTemplate not yet built; ID is not yet known")
 	}
@@ -458,11 +391,6 @@ func (e *InstanceTemplate) URL(project string) (string, error) {
 }
 
 func (_ *InstanceTemplate) RenderGCE(t *gce.GCEAPITarget, a, e, changes *InstanceTemplate) error {
-	//fmt.Printf("InstanceTemplate I am called 11231113%v\n", e.GuestAccelerators[0].AcceleratorType)
-	fmt.Printf("I am called 8\n")
-	fmt.Printf("I am called 8.1%v\n\n", a)
-	fmt.Printf("I am called 8.2%v\n\n", e)
-	fmt.Printf("I am called 8.3%v\n\n", changes)
 	project := t.Cloud.Project()
 
 	i, err := e.mapToGCE(project)
