@@ -97,7 +97,7 @@ func (e *InstanceTemplate) CompareWithID() *string {
 
 func (e *InstanceTemplate) Find(c *fi.Context) (*InstanceTemplate, error) {
 	fmt.Printf("I am called 2\n")
-	
+
 	cloud := c.Cloud.(gce.GCECloud)
 
 	response, err := cloud.Compute().InstanceTemplates.List(cloud.Project()).Do()
@@ -371,6 +371,8 @@ func (e *InstanceTemplate) mapToGCE(project string) (*compute.InstanceTemplate, 
 				Disks: disks,
 
 				GuestAccelerators: e.GuestAccelerators,
+				AcceleratorType: *e.AcceleratorType,
+				AcceleratorCount: *e.AcceleratorCount,
 
 				MachineType: *e.MachineType,
 				Metadata: &compute.Metadata{
