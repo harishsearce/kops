@@ -52,7 +52,12 @@ func (b *AutoscalingGroupModelBuilder) Build(c *fi.ModelBuilderContext) error {
 		if err != nil {
 			return err
 		}
-
+		fmt.Printf("gcemodel/autoscalinggroup.go Build%v\n\n", ig)
+		fmt.Printf("gcemodel/autoscalinggroup.go Build end\n\n")
+		fmt.Printf("igcemodel/autoscalinggroup.go Build I am called 9999%v\n", ig.Spec.GuestAccelerators)
+		if len(ig.Spec.GuestAccelerators) != 0 {
+			fmt.Printf("gcemodel/autoscalinggroup.go Build I am called 99999%v\n", ig.Spec.GuestAccelerators[0].AcceleratorType)
+		}
 		// InstanceTemplate
 		var instanceTemplate *gcetasks.InstanceTemplate
 		{
@@ -69,33 +74,67 @@ func (b *AutoscalingGroupModelBuilder) Build(c *fi.ModelBuilderContext) error {
 			}
 
 			namePrefix := gce.LimitedLengthName(name, gcetasks.InstanceTemplateNamePrefixMaxLength)
+			if len(ig.Spec.GuestAccelerators) != 0 {
+				t := &gcetasks.InstanceTemplate{
+					Name:           s(name),
+					NamePrefix:     s(namePrefix),
+					Lifecycle:      b.Lifecycle,
+					Network:        b.LinkToNetwork(),
+					MachineType:    s(ig.Spec.MachineType),
+					BootDiskType:   s(volumeType),
+					BootDiskSizeGB: i64(int64(volumeSize)),
+					BootDiskImage:  s(ig.Spec.Image),
 
-			t := &gcetasks.InstanceTemplate{
-				Name:           s(name),
-				NamePrefix:     s(namePrefix),
-				Lifecycle:      b.Lifecycle,
-				Network:        b.LinkToNetwork(),
-				MachineType:    s(ig.Spec.MachineType),
-				BootDiskType:   s(volumeType),
-				BootDiskSizeGB: i64(int64(volumeSize)),
-				BootDiskImage:  s(ig.Spec.Image),
+					CanIPForward: fi.Bool(true),
 
-				CanIPForward: fi.Bool(true),
+					GuestAccelerators: []*compute.AcceleratorConfig{
+						"acceleratorCount": i64(int64(ig.Spec.GuestAccelerators[1].AcceleratorCount)),
+						"acceleratorType":  s(ig.Spec.GuestAccelerators[0].AcceleratorType),
+					}
 
-				// TODO: Support preemptible nodes?
-				Preemptible: fi.Bool(false),
+					// TODO: Support preemptible nodes?
+					Preemptible: fi.Bool(false),
 
-				Scopes: []string{
-					"compute-rw",
-					"monitoring",
-					"logging-write",
-				},
+					Scopes: []string{
+						"compute-rw",
+						"monitoring",
+						"logging-write",
+					},
 
-				Metadata: map[string]*fi.ResourceHolder{
-					"startup-script": startupScript,
-					//"config": resources/config.yaml $nodeset.Name
-					"cluster-name": fi.WrapResource(fi.NewStringResource(b.ClusterName())),
-				},
+					Metadata: map[string]*fi.ResourceHolder{
+						"startup-script": startupScript,
+						//"config": resources/config.yaml $nodeset.Name
+						"cluster-name": fi.WrapResource(fi.NewStringResource(b.ClusterName())),
+					},
+				}
+			} else {
+				t := &gcetasks.InstanceTemplate{
+					Name:           s(name),
+					NamePrefix:     s(namePrefix),
+					Lifecycle:      b.Lifecycle,
+					Network:        b.LinkToNetwork(),
+					MachineType:    s(ig.Spec.MachineType),
+					BootDiskType:   s(volumeType),
+					BootDiskSizeGB: i64(int64(volumeSize)),
+					BootDiskImage:  s(ig.Spec.Image),
+
+					CanIPForward: fi.Bool(true),
+
+					// TODO: Support preemptible nodes?
+					Preemptible: fi.Bool(false),
+
+					Scopes: []string{
+						"compute-rw",
+						"monitoring",
+						"logging-write",
+					},
+
+					Metadata: map[string]*fi.ResourceHolder{
+						"startup-script": startupScript,
+						//"config": resources/config.yaml $nodeset.Name
+						"cluster-name": fi.WrapResource(fi.NewStringResource(b.ClusterName())),
+					},
+				}
 			}
 
 			storagePaths, err := iam.WriteableVFSPaths(b.Cluster, ig.Spec.Role)

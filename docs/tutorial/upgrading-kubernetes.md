@@ -92,6 +92,7 @@ Will create resources:
   	BootDiskSizeGB      	128
   	BootDiskType        	pd-standard
   	CanIPForward        	true
+    Harish                testing
   	Scopes              	[compute-rw, monitoring, logging-write, storage-ro]
   	Metadata            	{startup-script: <resource>, cluster-name: <resource>}
   	MachineType         	n1-standard-2

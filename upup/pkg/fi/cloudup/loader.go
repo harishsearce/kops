@@ -401,6 +401,8 @@ func (l *Loader) objectHandler(i *loader.TreeWalkItem) error {
 
 func (l *Loader) loadYamlObjects(key string, data string) (map[string]interface{}, error) {
 	var o map[string]interface{}
+	fmt.Printf("loader.go loadYamlObjects%v\n\n", data)
+	fmt.Printf("loader.go loadYamlObjects end\n\n")
 	if strings.TrimSpace(data) != "" {
 		err := utils.YamlUnmarshal([]byte(data), &o)
 		if err != nil {
@@ -502,6 +504,7 @@ func (l *Loader) populateResource(rh *fi.ResourceHolder, resource fi.Resource, a
 func (l *Loader) renderResource(resourceName string, args []string) (string, error) {
 	resourceKey := strings.TrimSuffix(resourceName, ".template")
 	resourceKey = strings.TrimPrefix(resourceKey, "resources/")
+	fmt.Printf("loader.go renderResource resourceKey%v\n\n", resourceKey)
 	configResource := l.Resources[resourceKey]
 	if configResource == nil {
 		return "", fmt.Errorf("cannot find resource %q", resourceName)
@@ -517,6 +520,7 @@ func (l *Loader) renderResource(resourceName string, args []string) (string, err
 	if err != nil {
 		return "", fmt.Errorf("error reading resource %q: %v", resourceName, err)
 	}
-
+	fmt.Printf("loader.go renderResource%v\n\n", string(data))
+	fmt.Printf("loader.go renderResource end\n\n")
 	return string(data), nil
 }
