@@ -158,7 +158,6 @@ func (c *ApplyClusterCmd) Run() error {
 		c.InstanceGroups = instanceGroups
 	}
 	fmt.Printf("Cloud Up Apply Cluster Flow 2%v\n", c.InstanceGroups)
-	fmt.Printf("Cloud Up Apply Cluster Flow 2%v\n", compute.InstanceTemplate)
 	if c.Models == nil {
 		c.Models = CloudupModels
 	}
