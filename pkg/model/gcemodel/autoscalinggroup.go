@@ -99,6 +99,7 @@ func (b *AutoscalingGroupModelBuilder) Build(c *fi.ModelBuilderContext) error {
 					AcceleratorCount: ig.Spec.GuestAccelerators[0].AcceleratorCount,
 					AcceleratorType:  ig.Spec.GuestAccelerators[0].AcceleratorType,
 				})
+				fmt.Printf("autoscalingGroup: accelerator: %v\n\n", accelerator)
 				//}
 				//volumeSize := fi.Int32Value(ig.Spec.RootVolumeSize)
 				t := &gcetasks.InstanceTemplate{
