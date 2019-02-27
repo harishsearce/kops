@@ -239,25 +239,10 @@ func RunUpdateCluster(f *util.Factory, clusterName string, out io.Writer, c *Upd
 			fmt.Printf("HA ADDR %v\n", &list.Items[i])
 			fmt.Printf("HA %v\n", list.Items[i])
 			if len(list.Items[i].Spec.GuestAccelerators) != 0 {
-				//fmt.Printf("HA GA %v\n", fi.String(list.Items[i].Spec.GuestAccelerators.AcceleratorType))
-				//fmt.Printf("HA GA1 %v\n", *list.Items[i].Spec.GuestAccelerators.AcceleratorType)
-				//fmt.Printf("HA GA2 %v\n", *list.Items[i].Spec.GuestAccelerators.AcceleratorCount)
-				//fmt.Printf("HA GA21 %v\n", fi.Int64(list.Items[i].Spec.GuestAccelerators.AcceleratorCount))
-				//fmt.Printf("HA GA1d %v\n", &list.Items[i].Spec)
-				//fmt.Printf("HA GA2d %v\n", &list.Items[i].Spec.GuestAccelerators)
-				//fmt.Printf("HA GA21 %v\n", &list.Items[i].Spec.GuestAccelerators[0].AcceleratorType)
+
 				fmt.Printf("HA GA2122 %v\n", list.Items[i].Spec.GuestAccelerators[0].AcceleratorType)
-				//fmt.Printf("HA GA2123 %v\n", list.Items[i].Spec.GuestAccelerators[0].AcceleratorCount)
-				fmt.Printf("HA GA2124 %v\n", list.Items[i].Spec.GuestAccelerators[1].AcceleratorCount)
-				//fmt.Printf("HA GA21 %v\n", *list.Items[i].Spec.GuestAccelerators[0].AcceleratorType)
-				//fmt.Printf("HA GA212 %v\n", fi.String(list.Items[i].Spec.GuestAccelerators[0].AcceleratorType))
-				//fmt.Printf("HA GA21 %v\n", fi.String(&list.Items[i].Spec.GuestAccelerators[0].AcceleratorType))
-				//fmt.Printf("HA GA21 %v\n", fi.String(*list.Items[i].Spec.GuestAccelerators[0].AcceleratorType))
-				//fmt.Printf("HA GA2 %v\n", fi.Int64(list.Items[i].Spec.GuestAccelerators[0].AcceleratorCount))
-				//fmt.Printf("HA GA22 %v\n", fi.Int64(list.Items[i].Spec.GuestAccelerators[1].AcceleratorCount))
+				fmt.Printf("HA GA2124 %v\n", list.Items[i].Spec.GuestAccelerators[0].AcceleratorCount)
 			}
-			//fmt.Printf("HA GA23d %v\n", &list.Items[i].Spec.GuestAccelerators.AcceleratorType)
-			//fmt.Printf("HA GA233d %v\n", &list.Items[i].Spec.GuestAccelerators.AcceleratorCount)
 			instanceGroups = append(instanceGroups, &list.Items[i])
 		}
 	}

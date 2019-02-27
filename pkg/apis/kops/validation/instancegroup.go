@@ -33,7 +33,7 @@ func ValidateInstanceGroup(g *kops.InstanceGroup) error {
 	fmt.Printf("ValidateInstanceGroup0 %v\n", g.Spec)
 	if g.Spec.GuestAccelerators != nil {
 		fmt.Printf("ValidateInstanceGroup1 %v\n", g.Spec.GuestAccelerators[0].AcceleratorType)
-		fmt.Printf("ValidateInstanceGroup2 %v\n", g.Spec.GuestAccelerators[1].AcceleratorCount)
+		fmt.Printf("ValidateInstanceGroup2 %v\n", g.Spec.GuestAccelerators[0].AcceleratorCount)
 	}
 	if g.ObjectMeta.Name == "" {
 		return field.Required(field.NewPath("Name"), "")

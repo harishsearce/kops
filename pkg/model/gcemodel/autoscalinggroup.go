@@ -96,7 +96,7 @@ func (b *AutoscalingGroupModelBuilder) Build(c *fi.ModelBuilderContext) error {
 				//if acverr == nil {
 				//AcceleratorCount: fi.Int64(ig.Spec.GuestAccelerators[1].AcceleratorCount),
 				accelerator = append(accelerator, &compute.AcceleratorConfig{
-					AcceleratorCount: ig.Spec.GuestAccelerators[1].AcceleratorCount,
+					AcceleratorCount: ig.Spec.GuestAccelerators[0].AcceleratorCount,
 					AcceleratorType:  ig.Spec.GuestAccelerators[0].AcceleratorType,
 				})
 				//}
