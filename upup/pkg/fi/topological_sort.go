@@ -76,8 +76,7 @@ func reflectForDependencies(tasks map[string]Task, task Task) []Task {
 
 func getDependencies(tasks map[string]Task, v reflect.Value) []Task {
 	var dependencies []Task
-	if(path == ".GuestAccelerators[0]")
-	{
+	if path == ".GuestAccelerators[0]" {
 		fmt.Printf(".GuestAccelerators[0] =  %v\n\n\n", path)
 		fmt.Printf(".GuestAccelerators[0] v 2 =  %v\n\n\n", v)
 	}
