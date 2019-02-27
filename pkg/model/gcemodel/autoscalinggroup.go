@@ -75,7 +75,20 @@ func (b *AutoscalingGroupModelBuilder) Build(c *fi.ModelBuilderContext) error {
 			}
 
 			namePrefix := gce.LimitedLengthName(name, gcetasks.InstanceTemplateNamePrefixMaxLength)
+
 			if len(ig.Spec.GuestAccelerators) != 0 {
+
+				var accelerator []*compute.AcceleratorConfig
+
+				acv, acverr := strconv.ParseInt(ig.Spec.GuestAccelerators[1].AcceleratorCount, 10, 64)
+
+				if acverr == nil {
+					accelerator = append(accelerator, &compute.AcceleratorConfig{
+						AcceleratorCount: acv,
+						AcceleratorType:  ig.Spec.GuestAccelerators[0].AcceleratorType,
+					})
+				}
+
 				t := &gcetasks.InstanceTemplate{
 					Name:           s(name),
 					NamePrefix:     s(namePrefix),
@@ -88,10 +101,7 @@ func (b *AutoscalingGroupModelBuilder) Build(c *fi.ModelBuilderContext) error {
 
 					CanIPForward: fi.Bool(true),
 
-					GuestAccelerators: []*compute.AcceleratorConfig{
-						"acceleratorCount": i64(int64(ig.Spec.GuestAccelerators[1].AcceleratorCount)),
-						"acceleratorType":  s(ig.Spec.GuestAccelerators[0].AcceleratorType),
-					},
+					GuestAccelerators: accelerator,
 
 					// TODO: Support preemptible nodes?
 					Preemptible: fi.Bool(false),
