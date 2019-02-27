@@ -76,10 +76,7 @@ func reflectForDependencies(tasks map[string]Task, task Task) []Task {
 
 func getDependencies(tasks map[string]Task, v reflect.Value) []Task {
 	var dependencies []Task
-	if path == ".GuestAccelerators[0]" {
-		fmt.Printf(".GuestAccelerators[0] =  %v\n\n\n", path)
-		fmt.Printf(".GuestAccelerators[0] v 2 =  %v\n\n\n", v)
-	}
+
 	err := reflectutils.ReflectRecursive(v, func(path string, f *reflect.StructField, v reflect.Value) error {
 		if reflectutils.IsPrimitiveValue(v) {
 			return nil
@@ -98,7 +95,6 @@ func getDependencies(tasks map[string]Task, v reflect.Value) []Task {
 				// Ignore self - we are a struct, but not our own dependency!
 				return nil
 			}
-
 			// TODO: Can we / should we use a type-switch statement
 			intf := v.Addr().Interface()
 			if hd, ok := intf.(HasDependencies); ok {
