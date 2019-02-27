@@ -19,7 +19,6 @@ package gcemodel
 import (
 	"fmt"
 	"strings"
-	"strconv"
 
 	"github.com/golang/glog"
 	compute "google.golang.org/api/compute/v0.beta"
