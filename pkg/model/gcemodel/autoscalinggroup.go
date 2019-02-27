@@ -96,8 +96,8 @@ func (b *AutoscalingGroupModelBuilder) Build(c *fi.ModelBuilderContext) error {
 				//if acverr == nil {
 				//AcceleratorCount: fi.Int64(ig.Spec.GuestAccelerators[1].AcceleratorCount),
 				accelerator = append(accelerator, &compute.AcceleratorConfig{
-					AcceleratorCount: ig.Spec.GuestAccelerators.AcceleratorCount,
-					AcceleratorType:  ig.Spec.GuestAccelerators.AcceleratorType,
+					AcceleratorCount: ig.Spec.GuestAccelerators[1].AcceleratorCount,
+					AcceleratorType:  ig.Spec.GuestAccelerators[0].AcceleratorType,
 				})
 				//}
 				//volumeSize := fi.Int32Value(ig.Spec.RootVolumeSize)
@@ -113,8 +113,8 @@ func (b *AutoscalingGroupModelBuilder) Build(c *fi.ModelBuilderContext) error {
 
 					CanIPForward: fi.Bool(true),
 
-					GuestAccelerators: accelerator,
-					//AcceleratorType: s(ig.Spec.GuestAccelerators[0].AcceleratorType),
+					//GuestAccelerators: accelerator,
+					AcceleratorType: s(ig.Spec.GuestAccelerators[0].AcceleratorType),
 
 					// TODO: Support preemptible nodes?
 					Preemptible: fi.Bool(false),
