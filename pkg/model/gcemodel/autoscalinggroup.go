@@ -21,6 +21,7 @@ import (
 	"strings"
 
 	"github.com/golang/glog"
+	compute "google.golang.org/api/compute/v0.beta"
 	"k8s.io/kops/pkg/apis/kops"
 	"k8s.io/kops/pkg/model"
 	"k8s.io/kops/pkg/model/defaults"
