@@ -121,7 +121,6 @@ func getDependencies(tasks map[string]Task, v reflect.Value) []Task {
 	})
 
 	if err != nil {
-		fmt.Printf("path: %v", path)
 		glog.Fatalf("unexpected error finding dependencies %v", err)
 	}
 

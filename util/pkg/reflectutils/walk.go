@@ -103,6 +103,9 @@ func ReflectRecursive(v reflect.Value, visitor visitorFunc) error {
 }
 
 func reflectRecursive(path string, v reflect.Value, visitor visitorFunc) error {
+
+	fmt.Printf("path: %v\n\n\n", path)
+	fmt.Printf("path end\n\n\n")
 	vType := v.Type()
 
 	err := visitor(path, nil, v)
