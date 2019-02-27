@@ -19,6 +19,7 @@ package gcemodel
 import (
 	"fmt"
 	"strings"
+	"strconv"
 
 	"github.com/golang/glog"
 	compute "google.golang.org/api/compute/v0.beta"
@@ -118,6 +119,46 @@ func (b *AutoscalingGroupModelBuilder) Build(c *fi.ModelBuilderContext) error {
 						"cluster-name": fi.WrapResource(fi.NewStringResource(b.ClusterName())),
 					},
 				}
+				
+				storagePaths, err := iam.WriteableVFSPaths(b.Cluster, ig.Spec.Role)
+				if err != nil {
+					return err
+				}
+				if len(storagePaths) == 0 {
+					t.Scopes = append(t.Scopes, "storage-ro")
+				} else {
+					glog.Warningf("enabling storage-rw for etcd backups")
+					t.Scopes = append(t.Scopes, "storage-rw")
+				}
+
+				if len(b.SSHPublicKeys) > 0 {
+					var gFmtKeys []string
+					for _, key := range b.SSHPublicKeys {
+						gFmtKeys = append(gFmtKeys, fmt.Sprintf("%s: %s", fi.SecretNameSSHPrimary, key))
+					}
+
+					t.Metadata["ssh-keys"] = fi.WrapResource(fi.NewStringResource(strings.Join(gFmtKeys, "\n")))
+				}
+
+				switch ig.Spec.Role {
+				case kops.InstanceGroupRoleMaster:
+					// Grant DNS permissions
+					t.Scopes = append(t.Scopes, "https://www.googleapis.com/auth/ndev.clouddns.readwrite")
+					t.Tags = append(t.Tags, b.GCETagForRole(kops.InstanceGroupRoleMaster))
+
+				case kops.InstanceGroupRoleNode:
+					t.Tags = append(t.Tags, b.GCETagForRole(kops.InstanceGroupRoleNode))
+				}
+
+				//labels, err := b.CloudTagsForInstanceGroup(ig)
+				//if err != nil {
+				//	return fmt.Errorf("error building cloud tags: %v", err)
+				//}
+				//t.Labels = labels
+
+				c.AddTask(t)
+
+				instanceTemplate = t
 			} else {
 				t := &gcetasks.InstanceTemplate{
 					Name:           s(name),
@@ -146,47 +187,47 @@ func (b *AutoscalingGroupModelBuilder) Build(c *fi.ModelBuilderContext) error {
 						"cluster-name": fi.WrapResource(fi.NewStringResource(b.ClusterName())),
 					},
 				}
-			}
 
-			storagePaths, err := iam.WriteableVFSPaths(b.Cluster, ig.Spec.Role)
-			if err != nil {
-				return err
-			}
-			if len(storagePaths) == 0 {
-				t.Scopes = append(t.Scopes, "storage-ro")
-			} else {
-				glog.Warningf("enabling storage-rw for etcd backups")
-				t.Scopes = append(t.Scopes, "storage-rw")
-			}
-
-			if len(b.SSHPublicKeys) > 0 {
-				var gFmtKeys []string
-				for _, key := range b.SSHPublicKeys {
-					gFmtKeys = append(gFmtKeys, fmt.Sprintf("%s: %s", fi.SecretNameSSHPrimary, key))
+				storagePaths, err := iam.WriteableVFSPaths(b.Cluster, ig.Spec.Role)
+				if err != nil {
+					return err
+				}
+				if len(storagePaths) == 0 {
+					t.Scopes = append(t.Scopes, "storage-ro")
+				} else {
+					glog.Warningf("enabling storage-rw for etcd backups")
+					t.Scopes = append(t.Scopes, "storage-rw")
 				}
 
-				t.Metadata["ssh-keys"] = fi.WrapResource(fi.NewStringResource(strings.Join(gFmtKeys, "\n")))
+				if len(b.SSHPublicKeys) > 0 {
+					var gFmtKeys []string
+					for _, key := range b.SSHPublicKeys {
+						gFmtKeys = append(gFmtKeys, fmt.Sprintf("%s: %s", fi.SecretNameSSHPrimary, key))
+					}
+
+					t.Metadata["ssh-keys"] = fi.WrapResource(fi.NewStringResource(strings.Join(gFmtKeys, "\n")))
+				}
+
+				switch ig.Spec.Role {
+				case kops.InstanceGroupRoleMaster:
+					// Grant DNS permissions
+					t.Scopes = append(t.Scopes, "https://www.googleapis.com/auth/ndev.clouddns.readwrite")
+					t.Tags = append(t.Tags, b.GCETagForRole(kops.InstanceGroupRoleMaster))
+
+				case kops.InstanceGroupRoleNode:
+					t.Tags = append(t.Tags, b.GCETagForRole(kops.InstanceGroupRoleNode))
+				}
+
+				//labels, err := b.CloudTagsForInstanceGroup(ig)
+				//if err != nil {
+				//	return fmt.Errorf("error building cloud tags: %v", err)
+				//}
+				//t.Labels = labels
+
+				c.AddTask(t)
+
+				instanceTemplate = t
 			}
-
-			switch ig.Spec.Role {
-			case kops.InstanceGroupRoleMaster:
-				// Grant DNS permissions
-				t.Scopes = append(t.Scopes, "https://www.googleapis.com/auth/ndev.clouddns.readwrite")
-				t.Tags = append(t.Tags, b.GCETagForRole(kops.InstanceGroupRoleMaster))
-
-			case kops.InstanceGroupRoleNode:
-				t.Tags = append(t.Tags, b.GCETagForRole(kops.InstanceGroupRoleNode))
-			}
-
-			//labels, err := b.CloudTagsForInstanceGroup(ig)
-			//if err != nil {
-			//	return fmt.Errorf("error building cloud tags: %v", err)
-			//}
-			//t.Labels = labels
-
-			c.AddTask(t)
-
-			instanceTemplate = t
 		}
 
 		// AutoscalingGroup
