@@ -81,14 +81,15 @@ func (b *AutoscalingGroupModelBuilder) Build(c *fi.ModelBuilderContext) error {
 
 				var accelerator []*compute.AcceleratorConfig
 
-				acv, acverr := strconv.ParseInt(ig.Spec.GuestAccelerators[1].AcceleratorCount, 10, 64)
+				//acv, acverr := ig.Spec.GuestAccelerators[1].AcceleratorCount
 
-				if acverr == nil {
-					accelerator = append(accelerator, &compute.AcceleratorConfig{
-						AcceleratorCount: acv,
-						AcceleratorType:  ig.Spec.GuestAccelerators[0].AcceleratorType,
-					})
-				}
+				//if acverr == nil {
+				//AcceleratorCount: fi.Int64(ig.Spec.GuestAccelerators[1].AcceleratorCount),
+				accelerator = append(accelerator, &compute.AcceleratorConfig{
+					AcceleratorCount: ig.Spec.GuestAccelerators[1].AcceleratorCount,
+					AcceleratorType:  ig.Spec.GuestAccelerators[0].AcceleratorType,
+				})
+				//}
 
 				t := &gcetasks.InstanceTemplate{
 					Name:           s(name),
@@ -119,7 +120,7 @@ func (b *AutoscalingGroupModelBuilder) Build(c *fi.ModelBuilderContext) error {
 						"cluster-name": fi.WrapResource(fi.NewStringResource(b.ClusterName())),
 					},
 				}
-				
+
 				storagePaths, err := iam.WriteableVFSPaths(b.Cluster, ig.Spec.Role)
 				if err != nil {
 					return err
