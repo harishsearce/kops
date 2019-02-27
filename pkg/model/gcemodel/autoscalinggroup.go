@@ -123,7 +123,7 @@ func (b *AutoscalingGroupModelBuilder) Build(c *fi.ModelBuilderContext) error {
 					Scopes: []string{
 						"compute-rw",
 						"monitoring",
-						"logging-write"
+						"logging-write",
 					},
 
 					Metadata: map[string]*fi.ResourceHolder{
