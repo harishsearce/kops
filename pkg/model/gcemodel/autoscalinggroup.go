@@ -113,7 +113,7 @@ func (b *AutoscalingGroupModelBuilder) Build(c *fi.ModelBuilderContext) error {
 
 					CanIPForward: fi.Bool(true),
 
-					GuestAccelerators: []*compute.AcceleratorConfig{
+					GuestAccelerators: &AcceleratorConfig{
 						AcceleratorCount: i64(int64(ig.Spec.GuestAccelerators[1].AcceleratorCount)),
 						AcceleratorType: s(ig.Spec.GuestAccelerators[0].AcceleratorType),
 					},
