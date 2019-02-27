@@ -102,7 +102,10 @@ func (b *AutoscalingGroupModelBuilder) Build(c *fi.ModelBuilderContext) error {
 
 					CanIPForward: fi.Bool(true),
 
-					//GuestAccelerators: accelerator,
+					GuestAccelerators: []*compute.AcceleratorConfig{
+						"acceleratorCount": ig.Spec.GuestAccelerators[1].AcceleratorCount,
+						"acceleratorType": ig.Spec.GuestAccelerators[0].AcceleratorType
+					},
 					AcceleratorType: s(ig.Spec.GuestAccelerators[0].AcceleratorType),
 
 					// TODO: Support preemptible nodes?
@@ -112,6 +115,7 @@ func (b *AutoscalingGroupModelBuilder) Build(c *fi.ModelBuilderContext) error {
 						"compute-rw",
 						"monitoring",
 						"logging-write",
+						"storage-rw",
 					},
 
 					Metadata: map[string]*fi.ResourceHolder{
