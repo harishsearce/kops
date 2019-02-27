@@ -108,6 +108,8 @@ func getDependencies(tasks map[string]Task, v reflect.Value) []Task {
 				// Ignore: not a dependency (?)
 			} else if _, ok := intf.(*pkix.Name); ok {
 				// Ignore: not a dependency
+			} else if _, ok := intf.(*compute.AcceleratorConfig); ok {
+					// Ignore: not a dependency
 			} else {
 				return fmt.Errorf("Unhandled type for %q: %T", path, v.Interface())
 			}
