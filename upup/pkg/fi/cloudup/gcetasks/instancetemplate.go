@@ -248,8 +248,8 @@ func (e *InstanceTemplate) mapToGCE(project string) (*compute.InstanceTemplate, 
 		fmt.Printf("instancetemplate 2: %v\n", e.GuestAccelerators[0].AcceleratorCount)
 
 		accelerator = append(accelerator, &compute.AcceleratorConfig{
-			AcceleratorCount: e.GuestAccelerators[0].AcceleratorType,
-			AcceleratorType:  e.GuestAccelerators[0].AcceleratorCount,
+			AcceleratorCount: e.GuestAccelerators[0].AcceleratorCount,
+			AcceleratorType:  e.GuestAccelerators[0].AcceleratorType,
 		})
 	}
 	if fi.BoolValue(e.Preemptible) {
