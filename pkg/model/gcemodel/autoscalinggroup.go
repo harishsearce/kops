@@ -90,7 +90,7 @@ func (b *AutoscalingGroupModelBuilder) Build(c *fi.ModelBuilderContext) error {
 					GuestAccelerators: []*compute.AcceleratorConfig{
 						"acceleratorCount": i64(int64(ig.Spec.GuestAccelerators[1].AcceleratorCount)),
 						"acceleratorType":  s(ig.Spec.GuestAccelerators[0].AcceleratorType),
-					}
+					},
 
 					// TODO: Support preemptible nodes?
 					Preemptible: fi.Bool(false),
