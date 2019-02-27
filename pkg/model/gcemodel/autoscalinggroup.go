@@ -35,17 +35,6 @@ const (
 	DefaultVolumeType = "pd-standard"
 )
 
-type AcceleratorConfig struct {
-	// AcceleratorCount: The number of the guest accelerator cards exposed
-	// to this instance.
-	AcceleratorCount int64 `json:"acceleratorCount,omitempty"`
-
-	// AcceleratorType: Full or partial URL of the accelerator type resource
-	// to attach to this instance. If you are creating an instance template,
-	// specify only the accelerator name.
-	AcceleratorType string `json:"acceleratorType,omitempty"`
-}
-
 // AutoscalingGroupModelBuilder configures AutoscalingGroup objects
 type AutoscalingGroupModelBuilder struct {
 	*GCEModelContext
@@ -101,8 +90,6 @@ func (b *AutoscalingGroupModelBuilder) Build(c *fi.ModelBuilderContext) error {
 					CanIPForward: fi.Bool(true),
 
 					GuestAccelerators: accelerator,
-					AcceleratorType: s(ig.Spec.GuestAccelerators[0].AcceleratorType),
-					AcceleratorCount: i64(int64(ig.Spec.GuestAccelerators[0].AcceleratorCount)),
 
 					// TODO: Support preemptible nodes?
 					Preemptible: fi.Bool(false),

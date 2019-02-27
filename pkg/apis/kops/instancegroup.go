@@ -126,12 +126,6 @@ type InstanceGroupSpec struct {
 	// GuestAccelerators: A list of the type and count of accelerator cards
 	// attached to the instance.
 	GuestAccelerators []*AcceleratorConfig `json:"guestAccelerators,omitempty"`
-	// OnHostMaintenance
-	OnHostMaintenance *string `json:"onHostMaintenance,omitempty"`
-	// AcceleratorType is the type of GPU
-	AcceleratorType *string `json:"acceleratorType,omitempty"`
-	// AcceleratorCount is the required GPUs per node
-	AcceleratorCount *int64 `json:"acceleratorCount,omitempty"`
 	// SecurityGroupOverride overrides the default security group created by Kops for this IG (AWS only).
 	SecurityGroupOverride *string `json:"securityGroupOverride,omitempty"`
 }

@@ -65,11 +65,6 @@ type InstanceTemplate struct {
 
 	GuestAccelerators []*compute.AcceleratorConfig
 
-	OnHostMaintenance *string
-
-	AcceleratorType  *string
-	AcceleratorCount *int64
-
 	// ID is the actual name
 	ID *string
 }
@@ -124,10 +119,7 @@ func (e *InstanceTemplate) Find(c *fi.Context) (*InstanceTemplate, error) {
 		}
 
 		actual.MachineType = fi.String(lastComponent(p.MachineType))
-		actual.OnHostMaintenance = fi.String(lastComponent(p.OnHostMaintenance))
-		actual.AcceleratorType = fi.String(lastComponent(p.AcceleratorType))
-		actual.AcceleratorCount = &p.AcceleratorCount
-		actual.GuestAccelerators = p.GuestAccelerators
+		actual.GuestAccelerators = &p.GuestAccelerators
 		actual.CanIPForward = &p.CanIpForward
 
 		bootDiskImage, err := ShortenImageURL(cloud.Project(), p.Disks[0].InitializeParams.SourceImage)
