@@ -115,7 +115,7 @@ func (b *AutoscalingGroupModelBuilder) Build(c *fi.ModelBuilderContext) error {
 
 					//GuestAccelerators: accelerator,
 					AcceleratorType: s(ig.Spec.GuestAccelerators[0].AcceleratorType),
-					AcceleratorCount: s(ig.Spec.GuestAccelerators[1].AcceleratorCount),
+					AcceleratorCount: i64(int64(ig.Spec.GuestAccelerators[1].AcceleratorCount)),
 
 					// TODO: Support preemptible nodes?
 					Preemptible: fi.Bool(false),
